@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('nama_lapangan');
-            $table->foreign('jenis_lapangan')->references('id')->on('jenis_lapangans')->onDelete('cascade');
+            $table->foreignId('jenis_lapangan_id')
+            ->constrained('jenis_lapangans')
+            ->onDelete('cascade');
             $table->string('gambar_lapangan')->nullable();
             $table->text('deskripsi_lapangan')->nullable();
             $table->integer('harga_sewa');

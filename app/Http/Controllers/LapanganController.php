@@ -39,7 +39,6 @@ class LapanganController extends Controller
    public function store(Request $request)
    
 {
-    dd('STORE KENA');
     $request->validate([
         'nama_lapangan' => 'required',
         'jenis_lapangan' => 'required',
@@ -58,8 +57,9 @@ class LapanganController extends Controller
         'deskripsi_lapangan' => $request->deskripsi_lapangan,
         'harga_sewa' => $request->harga_sewa,
     ]);
+      
 
-    return redirect()->route('admin.J')
+    return redirect()->route('admin.dashboard')
         ->with('success', 'Lapangan berhasil ditambahkan.');
 }
 
