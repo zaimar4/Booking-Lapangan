@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lapangan;
 use App\Models\JenisLapangan;
-use App\Models\lapangan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LapanganController extends Controller
 {
@@ -14,14 +13,12 @@ class LapanganController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $query=($user->role === 'admin') ? lapangan::query() : $user->lapangan();
-        
+        $query = Lapangan::with('jenisLapangan');
 
-        $view =($user->role === 'admin') ? 'admin.admindashboard' : 'user.userdashboard';
-        $lapangan = $query->Latest()->paginate(5);
-        return view($view, compact( 'lapangan'));
-        
+        $totalLapangan = $query->count();
+        $lapangan = $query->latest()->paginate(5);
+
+        return view('admin.admindashboard', compact('lapangan', 'totalLapangan'));
     }
 
     /**
@@ -29,69 +26,120 @@ class LapanganController extends Controller
      */
     public function create()
     {
-        $jenis_lapangan=JenisLapangan::all();
-        return view('admin.tambahlapangan',compact('jenis_lapangan'));
+        $jenis_lapangan = JenisLapangan::all();
+
+        return view('admin.tambahlapangan', compact('jenis_lapangan'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
-   
-{
-    $request->validate([
-        'nama_lapangan' => 'required',
-        'jenis_lapangan' => 'required',
-        'gambar_lapangan' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'harga_sewa' => 'required|numeric|min:0',
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nama_lapangan' => 'required',
+            'jenis_lapangan' => 'required',
+            'gambar_lapangan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'harga_sewa' => 'required|numeric|min:0',
 
-    $gambar_lapangan = $request->file('gambar_lapangan');
-    $nama_gambar = time() . '.' . $gambar_lapangan->extension();
-    $gambar_lapangan->move(public_path('images'), $nama_gambar);
+        ]
+        ,
+        [
+            'harga_sewa.min' => 'Harga Tidak Boleh Minus'
+        ]
+        );
 
-    lapangan::create([
-        'nama_lapangan' => $request->nama_lapangan,
-        'jenis_lapangan' => $request->jenis_lapangan,
-        'gambar_lapangan' => $nama_gambar,
-        'deskripsi_lapangan' => $request->deskripsi_lapangan,
-        'harga_sewa' => $request->harga_sewa,
-    ]);
-      
+        // Upload gambar
+        $gambar = $request->file('gambar_lapangan');
+        $nama_gambar = time() . '.' . $gambar->extension();
+        $gambar->move(public_path('images'), $nama_gambar);
 
-    return redirect()->route('admin.dashboard')
-        ->with('success', 'Lapangan berhasil ditambahkan.');
-}
+        // Simpan ke database
+        Lapangan::create([
+            'nama_lapangan' => $request->nama_lapangan,
+            'jenis_lapangan' => $request->jenis_lapangan,
+            'gambar_lapangan' => $nama_gambar,
+            'deskripsi_lapangan' => $request->deskripsi_lapangan,
+            'harga_sewa' => $request->harga_sewa,
+        ]);
+
+        return redirect()->route('admin.dashboard')
+            ->with('success', 'Lapangan berhasil ditambahkan.');
+    }
 
     /**
-     * Display the specified resource.
+     * Custom: tampil semua lapangan
      */
-    public function show(lapangan $lapangan)
+    public function getAll()
     {
-        //
+        $lapangan = Lapangan::with('jenisLapangan')
+            ->latest()
+            ->get();
+
+        $jenis_lapangan = JenisLapangan::all();
+        $totalLapangan = Lapangan::count();
+
+        return view('admin.adminsemualapangan', compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(lapangan $lapangan)
+    public function edit(Lapangan $lapangan)
     {
-        //
+        $jenis_lapangan = JenisLapangan::all();
+
+        return view('admin.editlapangan', compact('lapangan', 'jenis_lapangan'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, lapangan $lapangan)
+    public function update(Request $request, Lapangan $lapangan)
     {
-        //
+        $request->validate([
+            'nama_lapangan' => 'required',
+            'jenis_lapangan' => 'required',
+            'harga_sewa' => 'required|numeric|min:0',
+            'gambar_lapangan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('gambar_lapangan')) {
+
+            if ($lapangan->gambar_lapangan && file_exists(public_path('images/' . $lapangan->gambar_lapangan))) {
+                unlink(public_path('images/' . $lapangan->gambar_lapangan));
+            }
+
+            $gambar = $request->file('gambar_lapangan');
+            $nama_gambar = time() . '.' . $gambar->extension();
+            $gambar->move(public_path('images'), $nama_gambar);
+
+            $lapangan->gambar_lapangan = $nama_gambar;
+        }
+
+        $lapangan->update([
+            'nama_lapangan' => $request->nama_lapangan,
+            'jenis_lapangan' => $request->jenis_lapangan,
+            'deskripsi_lapangan' => $request->deskripsi_lapangan,
+            'harga_sewa' => $request->harga_sewa,
+        ]);
+
+        return redirect()->back()
+            ->with('success', 'Lapangan berhasil diupdate.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(lapangan $lapangan)
+    public function destroy(Lapangan $lapangan)
     {
-        //
+        if ($lapangan->gambar_lapangan && file_exists(public_path('images/' . $lapangan->gambar_lapangan))) {
+            unlink(public_path('images/' . $lapangan->gambar_lapangan));
+        }
+
+        $lapangan->delete();
+
+        return redirect()->back()
+            ->with('success', 'Lapangan berhasil dihapus.');
     }
 }

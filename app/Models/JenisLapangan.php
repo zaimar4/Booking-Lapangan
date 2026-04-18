@@ -10,7 +10,7 @@ class JenisLapangan extends Model
         'nama_jenis',
     ];
 
-    public function lapangan()
+    public function Lapangan()
     {
         return $this->hasMany(lapangan::class);
     }

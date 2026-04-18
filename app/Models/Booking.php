@@ -21,7 +21,7 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function lapangan()
+    public function Lapangan()
     {
         return $this->belongsTo(Lapangan::class);
     }

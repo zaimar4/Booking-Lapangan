@@ -2,7 +2,7 @@
 <form action="{{ route('admin.store-lapangan') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <label for="nama_lapangan">Nama Lapangan</label>
-    <input type="text" id="nama_lapangan" name="nama_lapangan">
+    <input type="text" id="nama_lapangan" name="nama_lapangan" required>
     <label for="jenis_lapangan">Jenis Lapangan</label>
    
     <select id="jenis_lapangan" name="jenis_lapangan">
@@ -13,11 +13,11 @@
       
     </select>
     <label for="gambar_lapangan">Gambar Lapangan</label>
-    <input type="file" id="gambar_lapangan" name="gambar_lapangan">
+    <input type="file" id="gambar_lapangan" name="gambar_lapangan" required>
     <label for="deskripsi_lapangan">Deskripsi Lapangan</label>
     <textarea id="deskripsi_lapangan" name="deskripsi_lapangan"></textarea>
     <label for="harga_sewa">Harga Sewa</label>
-    <input type="number" id="harga_sewa" name="harga_sewa">
+    <input type="number" id="harga_sewa" name="harga_sewa" required min="0">
     <button type="submit">Tambah Lapangan</button>
 
 </form>
