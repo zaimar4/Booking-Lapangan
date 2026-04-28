@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('lapangans')) {
+    Schema::create('lapangans', function (Blueprint $table) {
         Schema::create('lapangans', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
@@ -23,6 +25,9 @@ return new class extends Migration
             $table->integer('harga_sewa');
             $table->enum('status', ['Tersedia', 'Penuh'])->default('Tersedia');
         });
+    });
+}
+        
     }
 
     /**
