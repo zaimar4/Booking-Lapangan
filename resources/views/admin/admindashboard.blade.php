@@ -1,4 +1,6 @@
+
 <h1>Dashboard Admin</h1>
+
 <a href="{{ route('admin.tambah-lapangan') }}">Tambah Lapangan</a>
 <a href="{{ route('jenis-lapangan') }}">Tambah Jenis lapangan(Kategori)</a>
 <a href="{{ route('admin.semua-lapangan') }}">Lihat Semua Lapangan</a>
@@ -23,3 +25,4 @@
     </tr>
     @endforeach
 </table>
+

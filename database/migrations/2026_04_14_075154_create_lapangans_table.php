@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('nama_lapangan');
-            $table->foreignId('jenis_lapangan_id')
+            $table->foreignId('jenis_lapangan')
             ->constrained('jenis_lapangans')
             ->onDelete('cascade');
             $table->string('gambar_lapangan')->nullable();

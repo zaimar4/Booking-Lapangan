@@ -74,7 +74,7 @@ class LapanganController extends Controller
     {
         $lapangan = Lapangan::with('jenisLapangan')
             ->latest()
-            ->get();
+            ->paginate(10);
 
         $jenis_lapangan = JenisLapangan::all();
         $totalLapangan = Lapangan::count();
@@ -98,9 +98,9 @@ class LapanganController extends Controller
     public function update(Request $request, Lapangan $lapangan)
     {
         $request->validate([
-            'nama_lapangan' => 'required',
-            'jenis_lapangan' => 'required',
-            'harga_sewa' => 'required|numeric|min:0',
+            'nama_lapangan' => 'sometimes|required',
+            'jenis_lapangan' => 'sometimes|required',
+            'harga_sewa' => 'sometimes|required|numeric|min:0',
             'gambar_lapangan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -117,14 +117,13 @@ class LapanganController extends Controller
             $lapangan->gambar_lapangan = $nama_gambar;
         }
 
-        $lapangan->update([
-            'nama_lapangan' => $request->nama_lapangan,
-            'jenis_lapangan' => $request->jenis_lapangan,
-            'deskripsi_lapangan' => $request->deskripsi_lapangan,
-            'harga_sewa' => $request->harga_sewa,
-        ]);
-
-        return redirect()->back()
+       $lapangan->update($request->only([
+            'nama_lapangan',
+            'jenis_lapangan_id',
+            'deskripsi_lapangan',
+            'harga_sewa'
+        ]));
+        return redirect()->route('admin.semua-lapangan')
             ->with('success', 'Lapangan berhasil diupdate.');
     }
 
