@@ -11,7 +11,7 @@
     <title>@yield('title')</title>
 
 </head>
-<body class="bg-slate-50">
+<body class="bg-gray-50">
     
     <main class="flex h-screen">
         @yield('content')
