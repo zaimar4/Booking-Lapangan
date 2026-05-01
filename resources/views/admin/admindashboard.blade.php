@@ -15,7 +15,6 @@
         </div> --}}
 
         <div class="bg-white shadow-md rounded-lg p-6">
-            <h2 class="text-lg font-semibold mb-4">Total Lapangan: <span class="text-blue-600">{{ $totalLapangan }}</span></h2>
             
             <div class="overflow-x-auto">
                 <table class="min-w-full table-auto border-collapse">
@@ -37,7 +36,7 @@
                                 <span class="px-2 py-1 bg-gray-200 rounded text-xs">{{ $item->jenis_lapangan }}</span>
                             </td>
                             <td class="px-4 py-2 border">
-                                <img src="{{ asset('storage/images/' . $item->gambar_lapangan) }}" 
+                                <img src="{{ asset('images/' . $item->gambar_lapangan) }}" 
                                      alt="{{ $item->nama_lapangan }}" 
                                      class="w-20 h-12 object-cover rounded">
                             </td>
@@ -45,11 +44,16 @@
                             <td class="px-4 py-2 border font-medium text-green-600">
                                 Rp{{ number_format($item->harga_sewa, 0, ',', '.') }}
                             </td>
-                            <td class="px-4 py-2 border">
-                                <div class="flex gap-2">
-                                    <button class="text-blue-500 hover:underline">Edit</button>
-                                </div>
-                            </td>
+                             <td>
+                                <a href="{{ route('edit-lapangan', $item->id) }}">Edit</a>
+                                <a href="{{ route('detail-lapangan', $item->id) }}">detail</a>
+
+                                <form action="{{ route('delete-lapangan', $item->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Yakin hapus?')">Hapus</button>
+                                </form>
+                                </td>
                         </tr>
                         @empty
                         <tr>

@@ -1,4 +1,10 @@
-<h1>SEMUA LAPANGAN </h1>
+@extends("layouts.layout")
+@section('title', 'Daftar Lapangan')
+@section('content')
+
+<x-sidenavbar/>
+<div class="flex-1 p-8 ml-60">
+    <h1>SEMUA LAPANGAN </h1>
 <a href="{{ route('admin.tambah-lapangan') }}">Tambah Lapangan</a>
 <a href="{{ route('jenis-lapangan') }}">Tambah Jenis lapangan(Kategori)</a>
 <br>
@@ -33,3 +39,6 @@
     </tr>
     @endforeach
 </table>
+</div>
+
+@endsection

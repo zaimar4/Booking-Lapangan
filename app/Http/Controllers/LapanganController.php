@@ -141,4 +141,10 @@ class LapanganController extends Controller
         return redirect()->back()
             ->with('success', 'Lapangan berhasil dihapus.');
     }
+
+    public function show(lapangan $lapangan)
+    {
+        $lapangan->load('jenisLapangan');
+        return view('admin.detaillapangan', compact('lapangan'));
+    }
 }

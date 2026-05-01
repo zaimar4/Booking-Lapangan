@@ -5,8 +5,8 @@
       </div>
 
       <ul class="space-y-2 font-medium">
-         <li>
-            <a href="#" class="flex items-center px-3 py-2 text-white bg-zinc-900 rounded-lg group">
+         <li class="{{ request()->routeIs('admin.dashboard') ? 'bg-zinc-800 rounded-lg text-white' : '' }}">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2 text-whiterounded-lg group  ">
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z"/></svg>
                <span class="ms-3">Dashboard</span>
             </a>
