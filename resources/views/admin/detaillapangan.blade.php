@@ -15,8 +15,8 @@
                     <h6 class="m-0 font-weight-bold text-primary">Foto Utama</h6>
                 </div>
                 <div class="card-body text-center">
-                    @if($lapangan->foto)
-                        <img src="{{ asset('storage/' . $lapangan->foto) }}" class="img-fluid rounded shadow-sm" alt="Foto Lapangan">
+                    @if($lapangan->gambar_lapangan)
+                        <img src="{{ asset('images/' . $lapangan->gambar_lapangan) }}" class="img-fluid rounded shadow-sm" alt="Foto Lapangan" width="60">
                     @else
                         <div class="bg-light py-5 text-muted">Tidak ada foto</div>
                     @endif
@@ -58,7 +58,7 @@
                     <hr>
                     
                     <div class="mt-4">
-                        <h6 class="font-weight-bold">Ringkasan Statistik (Opsional):</h6>
+                        <h6 class="font-weight-bold">Ringkasan Statistik:</h6>
                         <div class="row text-center mt-3">
                             <div class="col-md-4">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Booking</div>

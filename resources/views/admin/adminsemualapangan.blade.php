@@ -28,6 +28,7 @@
         <td>{{ $item->harga_sewa }}</td>
         <td>
     <a href="{{ route('edit-lapangan', $item->id) }}">Edit</a>
+    <a href="{{ route('detail-lapangan', $item->id) }}">detail</a>
 
     <form action="{{ route('delete-lapangan', $item->id) }}" method="POST" style="display:inline;">
         @csrf
