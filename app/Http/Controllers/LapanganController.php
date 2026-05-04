@@ -10,7 +10,7 @@ class LapanganController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */
+     */gi
     public function index()
     {
         $query = Lapangan::with('jenisLapangan');
@@ -50,12 +50,12 @@ class LapanganController extends Controller
         ]
         );
 
-        // Upload gambar
+       
         $gambar = $request->file('gambar_lapangan');
         $nama_gambar = time() . '.' . $gambar->extension();
         $gambar->move(public_path('images'), $nama_gambar);
 
-        // Simpan ke database
+      
         Lapangan::create([
             'nama_lapangan' => $request->nama_lapangan,
             'jenis_lapangan' => $request->jenis_lapangan,
@@ -68,9 +68,7 @@ class LapanganController extends Controller
             ->with('success', 'Lapangan berhasil ditambahkan.');
     }
 
-    /**
-     * Custom: tampil semua lapangan
-     */
+  
     public function getAll()
     {
         $lapangan = Lapangan::with('jenisLapangan')
@@ -141,5 +139,11 @@ class LapanganController extends Controller
 
         return redirect()->back()
             ->with('success', 'Lapangan berhasil dihapus.');
+    }
+
+    public function show(lapangan $lapangan)
+    {
+        $lapangan->load('jenisLapangan');
+        return view('admin.detaillapangan', compact('lapangan'));
     }
 }
