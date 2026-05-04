@@ -12,7 +12,8 @@ class BookingController extends Controller
      */
     public function index()
     {
-        //
+        Booking::with('user', 'lapangan')->latest()->paginate(10);
+        
     }
 
     /**

@@ -49,12 +49,12 @@ class LapanganController extends Controller
         ]
         );
 
-        // Upload gambar
+       
         $gambar = $request->file('gambar_lapangan');
         $nama_gambar = time() . '.' . $gambar->extension();
         $gambar->move(public_path('images'), $nama_gambar);
 
-        // Simpan ke database
+      
         Lapangan::create([
             'nama_lapangan' => $request->nama_lapangan,
             'jenis_lapangan' => $request->jenis_lapangan,
@@ -67,14 +67,12 @@ class LapanganController extends Controller
             ->with('success', 'Lapangan berhasil ditambahkan.');
     }
 
-    /**
-     * Custom: tampil semua lapangan
-     */
+  
     public function getAll()
     {
         $lapangan = Lapangan::with('jenisLapangan')
             ->latest()
-            ->get();
+            ->paginate(10);
 
         $jenis_lapangan = JenisLapangan::all();
         $totalLapangan = Lapangan::count();
@@ -98,9 +96,9 @@ class LapanganController extends Controller
     public function update(Request $request, Lapangan $lapangan)
     {
         $request->validate([
-            'nama_lapangan' => 'required',
-            'jenis_lapangan' => 'required',
-            'harga_sewa' => 'required|numeric|min:0',
+            'nama_lapangan' => 'sometimes|required',
+            'jenis_lapangan' => 'sometimes|required',
+            'harga_sewa' => 'sometimes|required|numeric|min:0',
             'gambar_lapangan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -117,14 +115,13 @@ class LapanganController extends Controller
             $lapangan->gambar_lapangan = $nama_gambar;
         }
 
-        $lapangan->update([
-            'nama_lapangan' => $request->nama_lapangan,
-            'jenis_lapangan' => $request->jenis_lapangan,
-            'deskripsi_lapangan' => $request->deskripsi_lapangan,
-            'harga_sewa' => $request->harga_sewa,
-        ]);
-
-        return redirect()->back()
+       $lapangan->update($request->only([
+            'nama_lapangan',
+            'jenis_lapangan_id',
+            'deskripsi_lapangan',
+            'harga_sewa'
+        ]));
+        return redirect()->route('admin.semua-lapangan')
             ->with('success', 'Lapangan berhasil diupdate.');
     }
 
@@ -141,5 +138,11 @@ class LapanganController extends Controller
 
         return redirect()->back()
             ->with('success', 'Lapangan berhasil dihapus.');
+    }
+
+    public function show(lapangan $lapangan)
+    {
+        $lapangan->load('jenisLapangan');
+        return view('admin.detaillapangan', compact('lapangan'));
     }
 }

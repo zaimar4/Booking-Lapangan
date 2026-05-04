@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('lapangans')) {
+    Schema::create('lapangans', function (Blueprint $table) {
         Schema::create('lapangans', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('nama_lapangan');
-            $table->foreignId('jenis_lapangan_id')
+            $table->foreignId('jenis_lapangan')
             ->constrained('jenis_lapangans')
             ->onDelete('cascade');
             $table->string('gambar_lapangan')->nullable();
@@ -23,6 +25,9 @@ return new class extends Migration
             $table->integer('harga_sewa');
             $table->enum('status', ['Tersedia', 'Penuh'])->default('Tersedia');
         });
+    });
+}
+        
     }
 
     /**
