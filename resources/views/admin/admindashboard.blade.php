@@ -33,7 +33,7 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-2 border">{{ $item->nama_lapangan }}</td>
                             <td class="px-4 py-2 border">
-                                <span class="px-2 py-1 bg-gray-200 rounded text-xs">{{ $item->jenis_lapangan }}</span>
+                                <span class="px-2 py-1 bg-gray-200 rounded text-xs">{{ $item->jenisLapangan->nama_jenis}}</span>
                             </td>
                             <td class="px-4 py-2 border">
                                 <img src="{{ asset('images/' . $item->gambar_lapangan) }}" 

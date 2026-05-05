@@ -10,7 +10,7 @@ class LapanganController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */gi
+     */
     public function index()
     {
         $query = Lapangan::with('jenisLapangan');
