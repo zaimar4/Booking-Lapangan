@@ -17,6 +17,7 @@
         <th>Gambar Lapangan</th>
         <th>Deskripsi Lapangan</th>
         <th>Harga Sewa</th>
+        <th>Status</th>
         <th>Aksi</th>
     </tr>
     @foreach ($lapangan as $item)
@@ -26,10 +27,10 @@
         <td><img src="{{ asset('images/' . $item->gambar_lapangan) }}" alt="{{ $item->nama_lapangan }}" width="100"></td>
         <td>{{ $item->deskripsi_lapangan }}</td>
         <td>{{ $item->harga_sewa }}</td>
-        <td>
+        <td>{{ $item->status }}</td>
+    <td>
     <a href="{{ route('edit-lapangan', $item->id) }}">Edit</a>
     <a href="{{ route('detail-lapangan', $item->id) }}">detail</a>
-
     <form action="{{ route('delete-lapangan', $item->id) }}" method="POST" style="display:inline;">
         @csrf
         @method('DELETE')

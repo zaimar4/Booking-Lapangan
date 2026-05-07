@@ -17,6 +17,7 @@ class LapanganController extends Controller
 
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
+        
 
         return view('admin.admindashboard', compact('lapangan', 'totalLapangan'));
     }
