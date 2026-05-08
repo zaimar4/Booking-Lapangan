@@ -22,7 +22,7 @@
     @foreach ($lapangan as $item)
     <tr>
         <td>{{ $item->nama_lapangan }}</td>
-        <td>{{ $item->jenis_lapangan }}</td>
+        <td>{{ $item->JenisLapangan->nama_jenis }}</td>
         <td><img src="{{ asset('images/' . $item->gambar_lapangan) }}" alt="{{ $item->nama_lapangan }}" width="100"></td>
         <td>{{ $item->deskripsi_lapangan }}</td>
         <td>{{ $item->harga_sewa }}</td>
