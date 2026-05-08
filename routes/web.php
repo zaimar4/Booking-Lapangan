@@ -56,6 +56,8 @@ Route::get('/dashboard', function () {
     Route::get('/dashboard', function () {
         return view('user.userdashboard');
     })->name('user.dashboard');
+    Route::get('/temukan-lapangan',[LapanganController::class,'getAll'])->name('temukan-lapangan');
+
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
