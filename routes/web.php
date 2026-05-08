@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\ProfileController;
@@ -41,6 +42,17 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
     Route::delete('/delete/{lapangan}',[LapanganController::class,'destroy'])->name('delete-lapangan');
 });
 Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function () {
+
+Route::get('/dashboard', function () {
+        return view('user.userdashboard');
+    })->name('user.dashboard');
+
+    Route::get('/booking', [BookingController::class, 'create'])
+        ->name('booking.create');
+
+    Route::post('/booking', [BookingController::class, 'store'])
+        ->name('booking.store');
+
     Route::get('/dashboard', function () {
         return view('user.userdashboard');
     })->name('user.dashboard');

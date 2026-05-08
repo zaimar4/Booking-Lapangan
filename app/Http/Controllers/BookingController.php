@@ -3,66 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Lapangan;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        Booking::with('user', 'lapangan')->latest()->paginate(10);
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        
+        $lapangan = Lapangan::all();
+
+        return view('booking.create', compact('lapangan'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate(
-            
-        );
-    }
+        $request->validate([
+            'lapangan_id' => 'required',
+            'tanggal' => 'required',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Booking $booking)
-    {
-        //
-    }
+        $bentrok = Booking::where('lapangan_id', $request->lapangan_id)
+            ->where('tanggal', $request->tanggal)
+            ->where(function ($query) use ($request) {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Booking $booking)
-    {
-        //
-    }
+                $query->whereBetween('jam_mulai', [
+                    $request->jam_mulai,
+                    $request->jam_selesai
+                ])
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Booking $booking)
-    {
-        //
-    }
+                ->orWhereBetween('jam_selesai', [
+                    $request->jam_mulai,
+                    $request->jam_selesai
+                ])
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Booking $booking)
-    {
-        //
+                ->orWhere(function ($q) use ($request) {
+                    $q->where('jam_mulai', '<=', $request->jam_mulai)
+                      ->where('jam_selesai', '>=', $request->jam_selesai);
+                });
+
+            })
+            ->exists();
+
+        if ($bentrok) {
+            return back()->with('error', 'Jadwal sudah dibooking');
+        }
+
+        Booking::create([
+            'user_id' => auth()->id(),
+            'lapangan_id' => $request->lapangan_id,
+            'tanggal' => $request->tanggal,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai,
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', 'Booking berhasil');
     }
 }

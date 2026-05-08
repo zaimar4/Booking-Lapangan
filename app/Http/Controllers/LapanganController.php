@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lapangan;
 use App\Models\JenisLapangan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LapanganController extends Controller
 {
@@ -17,9 +18,15 @@ class LapanganController extends Controller
 
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
-$view = auth()->user()->role == 'admin'
+
+$view = Auth::user()->role == 'admin'
     ? 'admin.admindashboard'
     : 'user.userdashboard';
+
+
+        $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
+
+
         return view($view, compact('lapangan', 'totalLapangan'));
     }
 
@@ -41,7 +48,7 @@ $view = auth()->user()->role == 'admin'
         $request->validate([
             'nama_lapangan' => 'required',
             'jenis_lapangan' => 'required',
-            'gambar_lapangan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar_lapangan' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'harga_sewa' => 'required|numeric|min:0',
 
         ]
@@ -78,6 +85,7 @@ $view = auth()->user()->role == 'admin'
 
         $jenis_lapangan = JenisLapangan::all();
         $totalLapangan = Lapangan::count();
+        // view=Auth
 
         return view('admin.adminsemualapangan', compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
     }
@@ -144,7 +152,8 @@ $view = auth()->user()->role == 'admin'
 
     public function show(lapangan $lapangan)
     {
+         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
         $lapangan->load('jenisLapangan');
-        return view('admin.detaillapangan', compact('lapangan'));
+        return view($view, compact('lapangan'));
     }
 }
