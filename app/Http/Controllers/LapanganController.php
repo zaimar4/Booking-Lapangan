@@ -79,6 +79,7 @@ class LapanganController extends Controller
 
         $jenis_lapangan = JenisLapangan::all();
         $totalLapangan = Lapangan::count();
+        // view=Auth
 
         return view('admin.adminsemualapangan', compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
     }
@@ -145,7 +146,8 @@ class LapanganController extends Controller
 
     public function show(lapangan $lapangan)
     {
+         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
         $lapangan->load('jenisLapangan');
-        return view('admin.detaillapangan', compact('lapangan'));
+        return view($view, compact('lapangan'));
     }
 }
