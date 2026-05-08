@@ -88,7 +88,7 @@ $view = Auth::user()->role == 'admin'
           $view=Auth::user()->role == 'admin' ? 'admin.adminsemualapangan' : 'user.temukanlapangan';
 
 
-        return view($lapangan, compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
+        return view($view, compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
     }
 
     /**
@@ -153,7 +153,7 @@ $view = Auth::user()->role == 'admin'
 
     public function show(lapangan $lapangan)
     {
-         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
+         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdetaillapangan';
         $lapangan->load('jenisLapangan');
         return view($view, compact('lapangan'));
     }

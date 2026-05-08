@@ -42,8 +42,7 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
     Route::delete('/delete/{lapangan}',[LapanganController::class,'destroy'])->name('delete-lapangan');
 });
 Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function () {
-
-    Route::get('/dashboard', function () {
+Route::get('/dashboard', function () {
         return view('user.userdashboard');
     })->name('user.dashboard');
 
@@ -54,7 +53,7 @@ Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function ()
         ->name('booking.create');
 
     Route::post('/booking/store', [BookingController::class, 'store'])
-        ->name('booking.store');
+        ->name('booking.store');    
 
 });
 Route::middleware('auth')->group(function () {

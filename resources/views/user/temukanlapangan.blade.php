@@ -1,21 +1,45 @@
 @extends('layouts.layout')
-@section('title','Temukan lapangan')
-@section('content')
-@foreach ($lapangan as $lapangan)
-    <div class="container">
-       @if($lapangan->gambar_lapangan)
-                        <img src="{{ asset('images/' . $lapangan->gambar_lapangan) }}" class="img-fluid rounded shadow-sm" alt="Foto Lapangan" width="60">
-                    @else
-                        <div class="bg-light py-5 text-muted">Tidak ada foto</div>
-                    @endif
-                    <h3>{{$lapangan->nama_lapangan}}</h3>
-                    <p>{{$lapangan->jenisLapangan->nama_jenis}}</p>
-                    <p>{{$lapangan->harga_sewa}}</p>
-                    <p>{{$lapangan->deskripsi_lapangan}}</p>
 
-                <div>
-                    <button>Booking</button>
+@section('title','Temukan lapangan')
+
+@section('content')
+
+<div class="container">
+    @foreach ($lapangan as $item)
+        <div class="mb-4 p-3 border rounded shadow-sm">
+
+            @if($item->gambar_lapangan)
+                <img src="{{ asset('images/' . $item->gambar_lapangan) }}"
+                     class="img-fluid rounded shadow-sm"
+                     alt="Foto Lapangan"
+                     width="150">
+            @else
+                <div class="bg-light py-5 text-muted text-center">
+                    Tidak ada foto
                 </div>
-    </div>
-@endforeach
+            @endif
+
+            <h3>{{ $item->nama_lapangan }}</h3>
+
+            <p>
+                {{ $item->jenisLapangan->nama_jenis ?? 'Tidak ada jenis' }}
+            </p>
+
+            <p>Rp {{ number_format($item->harga_sewa, 0, ',', '.') }}</p>
+
+            <p>{{ $item->deskripsi_lapangan }}</p>
+
+            <div>
+                <a href="{{ route('user.detail-lapangan', $item->id) }}"
+                   class="text-green-500">
+                    Detail
+                </a>
+
+                <button>Booking</button>
+            </div>
+
+        </div>
+    @endforeach
+</div>
+
 @endsection
