@@ -5,14 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Lapangan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    public function create()
+    public function index()
     {
         $lapangan = Lapangan::all();
 
-        return view('booking.create', compact('lapangan'));
+        return view('user.booking.index', compact('lapangan'));
+    }
+
+    public function create(Lapangan $lapangan)
+    {
+        return view('user.booking.create', compact('lapangan'));
     }
 
     public function store(Request $request)
@@ -39,8 +45,10 @@ class BookingController extends Controller
                 ])
 
                 ->orWhere(function ($q) use ($request) {
+
                     $q->where('jam_mulai', '<=', $request->jam_mulai)
                       ->where('jam_selesai', '>=', $request->jam_selesai);
+
                 });
 
             })
@@ -51,7 +59,7 @@ class BookingController extends Controller
         }
 
         Booking::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'lapangan_id' => $request->lapangan_id,
             'tanggal' => $request->tanggal,
             'jam_mulai' => $request->jam_mulai,
