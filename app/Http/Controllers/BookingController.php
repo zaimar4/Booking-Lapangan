@@ -29,9 +29,13 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            
-        );
+      $request->validate([
+    'lapangan_id' => 'required|exists:lapangans,id',
+    'tanggal' => 'required|date',
+    'jam_mulai' => 'required',
+    'jam_selesai' => 'required|after:jam_mulai',
+]);
+    // butuh validasi agar ga bentrok baru create booking!
     }
 
     /**
