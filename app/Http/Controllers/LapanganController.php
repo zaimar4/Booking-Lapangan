@@ -17,12 +17,9 @@ class LapanganController extends Controller
 
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
-<<<<<<< HEAD
-        
-=======
-        $view=auth()->user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
->>>>>>> 5a695887a9c96505b4381c88b524f3fd1f641de8
-
+$view = auth()->user()->role == 'admin'
+    ? 'admin.admindashboard'
+    : 'user.userdashboard';
         return view($view, compact('lapangan', 'totalLapangan'));
     }
 
