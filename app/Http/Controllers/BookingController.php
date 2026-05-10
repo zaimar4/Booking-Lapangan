@@ -9,11 +9,26 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $lapangan = Lapangan::all();
+        $userId = Auth::id();
 
-        return view('user.booking', compact('lapangan'));
+        $counts = Booking::where('user_id', $userId)
+            ->selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $query = Booking::with(['lapangan.jenisLapangan'])
+            ->where('user_id', $userId)
+            ->latest();
+
+        if ($request->filled('status') && $request->status !== 'semua') {
+            $query->where('status', $request->status);
+        }
+
+        $bookings = $query->paginate(10)->withQueryString();
+
+        return view('user.bookingsaya', compact('bookings', 'counts'));
     }
 
     public function create(Lapangan $lapangan)
@@ -25,48 +40,54 @@ class BookingController extends Controller
     {
         $request->validate([
             'lapangan_id' => 'required',
-            'tanggal' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
+            'tanggal'     => 'required|date|after_or_equal:today',
+            'jam_mulai'   => 'required',
+            'jam_selesai' => 'required|after:jam_mulai',
+        ], [
+            'tanggal.after_or_equal' => 'Tanggal tidak boleh hari yang sudah lewat',
+            'jam_selesai.after'      => 'Jam selesai harus lebih dari jam mulai',
         ]);
 
         $bentrok = Booking::where('lapangan_id', $request->lapangan_id)
             ->where('tanggal', $request->tanggal)
             ->where(function ($query) use ($request) {
-
-                $query->whereBetween('jam_mulai', [
-                    $request->jam_mulai,
-                    $request->jam_selesai
-                ])
-
-                ->orWhereBetween('jam_selesai', [
-                    $request->jam_mulai,
-                    $request->jam_selesai
-                ])
-
-                ->orWhere(function ($q) use ($request) {
-
-                    $q->where('jam_mulai', '<=', $request->jam_mulai)
-                      ->where('jam_selesai', '>=', $request->jam_selesai);
-
-                });
-
+                $query->whereBetween('jam_mulai', [$request->jam_mulai, $request->jam_selesai])
+                      ->orWhereBetween('jam_selesai', [$request->jam_mulai, $request->jam_selesai])
+                      ->orWhere(function ($q) use ($request) {
+                          $q->where('jam_mulai', '<=', $request->jam_mulai)
+                            ->where('jam_selesai', '>=', $request->jam_selesai);
+                      });
             })
             ->exists();
 
         if ($bentrok) {
-            return back()->with('error', 'Jadwal sudah dibooking');
+            return back()->with('error', 'Jadwal sudah dibooking, pilih waktu lain.');
         }
 
         Booking::create([
-            'user_id' => Auth::id(),
+            'user_id'     => Auth::id(),
             'lapangan_id' => $request->lapangan_id,
-            'tanggal' => $request->tanggal,
-            'jam_mulai' => $request->jam_mulai,
+            'tanggal'     => $request->tanggal,
+            'jam_mulai'   => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
-            'status' => 'pending'
+            'status'      => 'pending',
         ]);
 
-        return back()->with('success', 'Booking berhasil');
+        return redirect()->route('booking.index')->with('success', 'Booking berhasil! Menunggu konfirmasi admin.');
     }
-}
+
+    public function destroy(Booking $booking)
+    {
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($booking->status !== 'pending') {
+            return back()->with('error', 'Hanya booking pending yang bisa dibatalkan.');
+        }
+
+        $booking->update(['status' => 'cancelled']);
+
+        return back()->with('success', 'Booking berhasil dibatalkan.');
+    }
+} 

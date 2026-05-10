@@ -81,7 +81,6 @@ $view = Auth::user()->role == 'admin'
     {
         $lapangan = Lapangan::with('jenisLapangan')
             ->latest()
-            ->get()
             ->paginate(10);
 
         $jenis_lapangan = JenisLapangan::all();
