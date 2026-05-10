@@ -1,3 +1,8 @@
-{{-- KAsih CODE UI DAHBOARD --}}
+@extends('layouts.layout')
 
-<h1>Dashboard User</h1>
+@section('title','Detail lapangan')
+@section('content')
+<x-sidenavbar />
+
+
+@endsection

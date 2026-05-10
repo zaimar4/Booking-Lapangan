@@ -22,7 +22,7 @@ class Lapangan extends Model
     }
     public function jenisLapangan()
     {
-        return $this->belongsTo(JenisLapangan::class, 'id');
+        return $this->belongsTo(JenisLapangan::class,'jenis_lapangan' ,'id');
     }
 }
 

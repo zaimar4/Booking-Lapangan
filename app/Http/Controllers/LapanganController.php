@@ -19,7 +19,13 @@ class LapanganController extends Controller
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
 
+$view = Auth::user()->role == 'admin'
+    ? 'admin.admindashboard'
+    : 'user.userdashboard';
+
+
         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
+
 
         return view($view, compact('lapangan', 'totalLapangan'));
     }
@@ -75,12 +81,15 @@ class LapanganController extends Controller
     {
         $lapangan = Lapangan::with('jenisLapangan')
             ->latest()
+            ->get()
             ->paginate(10);
 
         $jenis_lapangan = JenisLapangan::all();
         $totalLapangan = Lapangan::count();
+          $view=Auth::user()->role == 'admin' ? 'admin.adminsemualapangan' : 'user.temukanlapangan';
 
-        return view('admin.adminsemualapangan', compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
+
+        return view($view, compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
     }
 
     /**
@@ -145,7 +154,8 @@ class LapanganController extends Controller
 
     public function show(lapangan $lapangan)
     {
+         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdetaillapangan';
         $lapangan->load('jenisLapangan');
-        return view('admin.detaillapangan', compact('lapangan'));
+        return view($view, compact('lapangan'));
     }
 }

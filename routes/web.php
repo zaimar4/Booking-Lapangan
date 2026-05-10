@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\ProfileController;
@@ -41,9 +42,19 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
     Route::delete('/delete/{lapangan}',[LapanganController::class,'destroy'])->name('delete-lapangan');
 });
 Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function () {
-    Route::get('/dashboard', function () {
+Route::get('/dashboard', function () {
         return view('user.userdashboard');
     })->name('user.dashboard');
+
+    Route::get('/cari-lapangan', [BookingController::class, 'index'])
+        ->name('user.cari-lapangan');
+
+    Route::get('/booking/{lapangan}', [BookingController::class, 'create'])
+        ->name('booking.create');
+
+    Route::post('/booking/store', [BookingController::class, 'store'])
+        ->name('booking.store');    
+
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

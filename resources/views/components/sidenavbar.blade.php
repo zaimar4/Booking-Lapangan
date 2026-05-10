@@ -3,8 +3,8 @@
       <div class="mb-6 px-2 font-bold text-xl tracking-tight text-zinc-900">
           BOOKING<span class="text-zinc-500">LAPANGAN</span>
       </div>
-
-      <ul class="space-y-2 font-medium">
+      @if (Auth::user()->role == 'admin')
+            <ul class="space-y-2 font-medium">
          <li class="{{ request()->routeIs('admin.dashboard') ? 'bg-zinc-800 rounded-lg text-white' : ' text-zinc-500' }}">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2 text-whiterounded-lg group hover:bg-zinc-100 hover:text-zinc-900 transition-colors">
                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z"/></svg>
@@ -50,6 +50,116 @@
                <span class="inline-flex items-center justify-center w-5 h-5 ms-2 text-xs font-bold text-white bg-zinc-900 rounded-full">2</span>
             </a>
          </li>
+      @endif
+
+     @if (Auth::user()->role == 'user')
+
+<ul class="space-y-2 font-medium">
+
+    <li class="{{ request()->routeIs('user.dashboard') ? 'bg-zinc-800 rounded-lg text-white' : 'text-zinc-500' }}">
+        <a href="{{ route('user.dashboard') }}"
+           class="flex items-center px-3 py-2 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
+
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 12l2-2m0 0l7-7 7 7m-9 2v8m0-8H5m7 0h7"/>
+            </svg>
+               <span class="ms-3">Dashboard</span>
+        </a>
+        
+    </li>
+
+
+    <li>
+        <a href="{{ route('user.cari-lapangan') }}"
+           class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
+
+            <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 01.553-.894L9 2m0 18l6-2m-6 2V2m6 16l5.447-2.724A1 1 0 0021 16.382V5.618a1 1 0 00-.553-.894L15 2m0 16V2m-6 0l6 2"/>
+            </svg>
+
+            <span class="ms-3">Cari Lapangan</span>
+        </a>
+    </li>
+
+    <li>
+        <a href="#"
+           class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
+
+            <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+
+            <span class="ms-3">Booking Saya</span>
+        </a>
+    </li>
+
+    <li>
+        <a href="#"
+           class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
+
+            <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+
+            <span class="ms-3">Riwayat Booking</span>
+        </a>
+    </li>
+
+    <p class="px-3 py-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider mt-4">
+        Account
+    </p>
+
+    <li>
+        <a href="#"
+           class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
+
+            <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5.121 17.804A9 9 0 1118.88 17.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+
+            <span class="ms-3">Profile</span>
+        </a>
+    </li>
+
+</ul>
+
+@endif
+      
 
          <li>
             <a href="{{ route('logout') }}" 
