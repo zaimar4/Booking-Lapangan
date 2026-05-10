@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama_lapangan');
             $table->foreignId('jenis_lapangan')
             ->constrained('jenis_lapangans')
-            ->onDelete('cascade');
+            ->cascadeOnDelete();
             $table->string('gambar_lapangan')->nullable();
             $table->text('deskripsi_lapangan')->nullable();
             $table->integer('harga_sewa');

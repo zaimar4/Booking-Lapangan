@@ -17,24 +17,31 @@
         <th>Gambar Lapangan</th>
         <th>Deskripsi Lapangan</th>
         <th>Harga Sewa</th>
+        <th>Status</th>
         <th>Aksi</th>
     </tr>
     @foreach ($lapangan as $item)
     <tr>
         <td>{{ $item->nama_lapangan }}</td>
         <td>{{ $item->JenisLapangan->nama_jenis }}</td>
+       
+          <td class="px-4 py-2 border">
+             <span class="px-2 py-1 bg-gray-200 rounded text-xs">
+                {{ $item->jenisLapangan->nama_jenis }}
+              </span>
+              </td>
         <td><img src="{{ asset('images/' . $item->gambar_lapangan) }}" alt="{{ $item->nama_lapangan }}" width="100"></td>
         <td>{{ $item->deskripsi_lapangan }}</td>
         <td>{{ $item->harga_sewa }}</td>
+        <td>{{ $item->status }}</td>
         <td>
-    <a href="{{ route('edit-lapangan', $item->id) }}">Edit</a>
-    <a href="{{ route('detail-lapangan', $item->id) }}">detail</a>
-
-    <form action="{{ route('delete-lapangan', $item->id) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit" onclick="return confirm('Yakin hapus?')">Hapus</button>
-    </form>
+        <a href="{{ route('edit-lapangan', $item->id) }}">Edit</a>
+        <a href="{{ route('detail-lapangan', $item->id) }}">detail</a>
+        <form action="{{ route('delete-lapangan', $item->id) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" onclick="return confirm('Yakin hapus?')">Hapus</button>
+        </form>
     </td>
 
     </tr>

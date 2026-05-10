@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lapangan;
 use App\Models\JenisLapangan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LapanganController extends Controller
 {
@@ -17,7 +18,8 @@ class LapanganController extends Controller
 
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
-        $view=auth()->user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
+
+        $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
 
         return view($view, compact('lapangan', 'totalLapangan'));
     }
@@ -40,7 +42,7 @@ class LapanganController extends Controller
         $request->validate([
             'nama_lapangan' => 'required',
             'jenis_lapangan' => 'required',
-            'gambar_lapangan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar_lapangan' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'harga_sewa' => 'required|numeric|min:0',
 
         ]
