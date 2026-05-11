@@ -113,7 +113,7 @@
     </li>
 
     <li>
-        <a href="#"
+        <a href="{{ route('booking.index') }}"
            class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
 
             <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"

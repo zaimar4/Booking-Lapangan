@@ -4,122 +4,128 @@
 
 @section('content')
 
-<div class="flex">
-    <x-sidenavbar />
+<div class="p-6 ml-60">
 
-    <div class="flex-1 p-8 ml-60">
+    <!-- HEADER -->
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        Dashboard Admin
+    </h1>
 
-        <h1 class="text-2xl font-bold mb-6">
-            Dashboard Admin
-        </h1>
+    <!-- STAT CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
-        <div class="flex flex-row gap-4 mb-6">
-
-            <div class="flex justify-center items-center bg-slate-400 rounded-xl border border-black px-4 py-4">
-                <p>
-                    Total Lapangan :
-                    <span class="text-black font-bold">
-                        {{ $totalLapangan }}
-                    </span>
-                </p>
-            </div>
-
-            <div class="flex justify-center items-center bg-slate-400 rounded-xl border border-black px-4 py-4">
-                <p>
-                    Total Booking :
-                    <span class="text-black font-bold">
-                        {{ $totalLapangan }}
-                    </span>
-                </p>
-            </div>
-
+        <div class="bg-white rounded-2xl shadow p-5 border">
+            <p class="text-gray-500 text-sm">Total Lapangan</p>
+            <h2 class="text-3xl font-bold text-green-600 mt-2">
+                {{ $totalLapangan }}
+            </h2>
         </div>
 
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white rounded-2xl shadow p-5 border">
+            <p class="text-gray-500 text-sm">Total Booking</p>
+            <h2 class="text-3xl font-bold text-blue-600 mt-2">
+                {{ $totalBooking ?? 0 }}
+            </h2>
+        </div>
 
-            <div class="overflow-x-auto">
+        <div class="bg-white rounded-2xl shadow p-5 border">
+            <p class="text-gray-500 text-sm">Booking Pending</p>
+            <h2 class="text-3xl font-bold text-yellow-600 mt-2">
+                {{ $bookingpending ?? 0 }}
+            </h2>
+        </div>
 
-                <table class="min-w-full table-auto border-collapse">
+    </div>
 
-                    <thead>
-                        <tr class="bg-gray-100 text-left">
-                            <th class="px-4 py-2 border">Nama Lapangan</th>
-                            <th class="px-4 py-2 border">Jenis</th>
-                            <th class="px-4 py-2 border">Gambar</th>
-                            <th class="px-4 py-2 border">Deskripsi</th>
-                            <th class="px-4 py-2 border">Harga Sewa</th>
-                            <th class="px-4 py-2 border">Aksi</th>
-                        </tr>
-                    </thead>
+    <div class="bg-white shadow-md rounded-2xl overflow-hidden">
 
-                    <tbody>
+        <div class="p-4 border-b">
+            <h2 class="text-lg font-semibold text-gray-700">
+                Booking Masuk (Pending)
+            </h2>
+        </div>
 
-                        @forelse ($lapangan as $item)
+        <div class="overflow-x-auto">
 
-                        <tr class="hover:bg-gray-50">
+            <table class="min-w-full text-sm">
 
-                            <td class="px-4 py-2 border">
-                                {{ $item->nama_lapangan }}
-                            </td>
+                <thead class="bg-gray-100 text-left text-gray-700">
+                    <tr>
+                        <th class="px-4 py-3">Pemesan</th>
+                        <th class="px-4 py-3">Lapangan</th>
+                        <th class="px-4 py-3">Jenis</th>
+                        <th class="px-4 py-3">Tanggal Booking</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Aksi</th>
+                    </tr>
+                </thead>
 
-                            <td class="px-4 py-2 border">
-                                <span class="px-2 py-1 bg-gray-200 rounded text-xs">
-                                    {{ $item->jenisLapangan->nama_jenis }}
-                                </span>
-                            </td>
+                <tbody>
 
-                            <td class="px-4 py-2 border">
-                                <img
-                                    src="{{ asset('images/' . $item->gambar_lapangan) }}"
-                                    alt="{{ $item->nama_lapangan }}"
-                                    class="w-20 h-12 object-cover rounded">
-                            </td>
+                    @forelse ($bookings as $item)
 
-                            <td class="px-4 py-2 border text-sm">
-                                {{ Str::limit($item->deskripsi_lapangan, 50) }}
-                            </td>
+                    <tr class="border-b hover:bg-gray-50 transition">
 
-                            <td class="px-4 py-2 border font-medium text-green-600">
-                                Rp{{ number_format($item->harga_sewa, 0, ',', '.') }}
-                            </td>
+                        <td class="px-4 py-3 font-medium">
+                            {{ $item->user->name ?? 'User' }}
+                        </td>
 
-                            <td class="px-4 py-2 border">
+                        <td class="px-4 py-3">
+                            {{ $item->lapangan->nama_lapangan }}
+                        </td>
 
-                                <a
-                                    href="{{ route('edit-lapangan', $item->id) }}"
-                                    class="text-blue-500">
-                                    Edit
-                                </a>
+                        <td class="px-4 py-3">
+                            <span class="bg-gray-200 text-xs px-2 py-1 rounded">
+                                {{ $item->lapangan->jenisLapangan->nama_jenis }}
+                            </span>
+                        </td>
 
-                                <a
-                                    href="{{ route('detail-lapangan', $item->id) }}"
-                                    class="text-green-500 ml-2">
-                                    Detail
-                                </a>
+                        <td class="px-4 py-3 text-gray-600 text-sm">
+                            {{ $item->tanggal_booking ?? '-' }}
+                        </td>
 
-                            </td>
+                        <td class="px-4 py-3">
+                            <span class="bg-yellow-200 text-yellow-700 text-xs px-2 py-1 rounded">
+                                {{ $item->status }}
+                            </span>
+                        </td>
 
-                        </tr>
+                        <td class="px-4 py-3 flex gap-2">
 
-                        @empty
+                            <!-- DETAIL -->
+                            {{-- <a href="{{ route('detail-booking', $item->id) }}"
+                               class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
+                                Detail
+                            </a>
 
-                        <tr>
-                            <td colspan="6" class="text-center py-4">
-                                Tidak ada data lapangan
-                            </td>
-                        </tr>
+                            <!-- APPROVE -->
+                            <a href="{{ route('approve-booking', $item->id) }}"
+                               class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs">
+                                Approve
+                            </a> --}}
 
-                        @endforelse
+                        </td>
 
-                    </tbody>
+                    </tr>
 
-                </table>
+                    @empty
 
-            </div>
+                    <tr>
+                        <td colspan="6" class="text-center py-6 text-gray-500">
+                            Tidak ada booking masuk
+                        </td>
+                    </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
 
         </div>
 
     </div>
+
 </div>
 
 @endsection

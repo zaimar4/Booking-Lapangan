@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Lapangan;
 use App\Models\JenisLapangan;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class LapanganController extends Controller
 
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
+        
 
 $view = Auth::user()->role == 'admin'
     ? 'admin.admindashboard'
@@ -25,9 +27,14 @@ $view = Auth::user()->role == 'admin'
 
 
         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
+       $bookingpending=Booking::where('status','pending')->count();
+         $bookingapproved=Booking::where('status','approved')->count();
+         $totalbooking=Booking::count();
+         $bookings=Booking::with(['lapangan.jenisLapangan'])->latest()->paginate(10);
+            
 
 
-        return view($view, compact('lapangan', 'totalLapangan'));
+        return view($view, compact('lapangan', 'totalLapangan','bookingpending','bookingapproved','totalbooking','bookings'));
     }
 
     /**

@@ -3,8 +3,11 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<<<<<<< HEAD
 <div class="flex">
     <x-sidenavbar />
+=======
+>>>>>>> b2fad64ad5c5a64821639ffebb3a65d100d908a7
 
     <div class="flex-1 p-8 ml-64">
 

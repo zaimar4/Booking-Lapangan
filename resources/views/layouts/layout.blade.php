@@ -15,11 +15,11 @@
     
 <main class="flex min-h-screen">
 
-    <div class="w-64">
+    <div class="w-50 ">
         <x-sidenavbar />
     </div>
 
-    <div class="flex-1 p-6">
+    <div class="flex-1 p-6 ">
         @yield('content')
     </div>
 
