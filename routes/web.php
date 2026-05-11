@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\ProfileController;
@@ -29,7 +30,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function () {
-    Route::get('/dashboard', [LapanganController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/tambah-lapangan', [LapanganController::class, 'create'])->name('admin.tambah-lapangan');
     Route::post('tambah-lapangan', [LapanganController::class, 'store'])->name('admin.store-lapangan');
     Route::get('/semua-lapangan', [LapanganController::class, 'getAll'])->name('admin.semua-lapangan');
