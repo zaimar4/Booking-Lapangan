@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Lapangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 
 class BookingController extends Controller
 {
@@ -30,6 +31,14 @@ class BookingController extends Controller
 
         return view('user.bookingsaya', compact('bookings', 'counts'));
     }
+    public function getnewbooking(){
+        $query = Booking::with(['lapangan.jenisLapangan'])
+            ->where('status', 'pending')
+            ->latest()->paginate(10);
+            
+        return view('admin.admindashboard', compact('query'));
+    }
+    
 
     public function create(Lapangan $lapangan)
     {
