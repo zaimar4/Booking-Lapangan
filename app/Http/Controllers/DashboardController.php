@@ -11,6 +11,7 @@ class DashboardController extends Controller
 {
     public function index(LarapexChart $chart)
     {
+        // ── Grafik Total Booking Perbulan ──────────────────────────────────────
         $bookingData = Booking::select(
                 DB::raw('MONTH(created_at) as bulan'),
                 DB::raw('COUNT(*) as total')
@@ -20,45 +21,52 @@ class DashboardController extends Controller
             ->get();
 
         $bulanBooking = [];
-        $totalBooking = [];
-
+        $jumlahBooking = [];
         foreach ($bookingData as $data) {
-            $bulanBooking[] = date('F', mktime(0, 0, 0, $data->bulan, 1));
-            $totalBooking[] = $data->total;
+            $bulanBooking[]  = date('F', mktime(0, 0, 0, $data->bulan, 1));
+            $jumlahBooking[] = $data->total;
         }
 
         $bookingChart = $chart->barChart()
             ->setTitle('Total Booking Perbulan')
-            ->addData( $totalBooking)
+            ->addData($jumlahBooking)
             ->setXAxis($bulanBooking);
 
         $pendapatanData = Booking::select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('SUM(total_harga) as total')
+                DB::raw('MONTH(bookings.created_at) as bulan'),
+                DB::raw('SUM(
+                    lapangans.harga_sewa *
+                    TIMESTAMPDIFF(HOUR, bookings.jam_mulai, bookings.jam_selesai)
+                ) as total')
             )
-            ->whereIn('status', ['confirmed', 'completed'])
+            ->join('lapangans', 'lapangans.id', '=', 'bookings.lapangan_id')
+            ->whereIn('bookings.status', ['confirmed', 'completed'])
             ->groupBy('bulan')
             ->orderBy('bulan')
             ->get();
 
         $bulanPendapatan = [];
-        $totalPendapatan = [];
-
+        $nilaiPendapatan = [];
         foreach ($pendapatanData as $data) {
             $bulanPendapatan[] = date('F', mktime(0, 0, 0, $data->bulan, 1));
-            $totalPendapatan[] = $data->total;
+            $nilaiPendapatan[] = $data->total;
         }
 
-        $pendapatanChart = $chart->lineChart()
-            ->setTitle('Total Pendapatan Perbulan')
-            ->addData( $totalPendapatan)
-            ->setXAxis($bulanPendapatan);
+        $pendapatanChart = $chart->barChart()
+    ->setTitle('Total Pendapatan Perbulan')
+    ->addData($nilaiPendapatan)
+    ->setXAxis($bulanPendapatan);
+    
+        // ── Summary Cards ──────────────────────────────────────────────────────
+        $totalBookingSemua = Booking::count();
+        $bookingPending    = Booking::where('status', 'pending')->count();
+        $totalLapangan     = Lapangan::count();
 
-        $totalBookingSemua    = Booking::count();
-        $bookingPending       = Booking::where('status', 'pending')->count();
-        $totalPendapatanSemua = Booking::whereIn('status', ['confirmed', 'completed'])
-                                    ->sum('total_harga');
-        $totalLapangan        = Lapangan::count();
+        // Total pendapatan = harga_sewa * durasi untuk booking confirmed/completed
+        $totalPendapatanSemua = Booking::join('lapangans', 'lapangans.id', '=', 'bookings.lapangan_id')
+            ->whereIn('bookings.status', ['confirmed', 'completed'])
+            ->selectRaw('SUM(lapangans.harga_sewa * TIMESTAMPDIFF(HOUR, bookings.jam_mulai, bookings.jam_selesai)) as total')
+            ->value('total') ?? 0;
 
         $bookings = Booking::with(['user', 'lapangan.jenisLapangan'])
             ->latest()

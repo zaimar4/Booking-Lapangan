@@ -117,8 +117,11 @@
                         </td>
 
                         <td class="px-4 py-3 font-semibold text-green-600">
-                            Rp {{ number_format($item->total_harga ?? 0, 0, ',', '.') }}
-                        </td>
+    @php
+        $durasi = \Carbon\Carbon::parse($item->jam_mulai)->diffInHours(\Carbon\Carbon::parse($item->jam_selesai));
+    @endphp
+    Rp{{ number_format($item->lapangan->harga_sewa * $durasi, 0, ',', '.') }}
+</td>
 
                     </tr>
                     @empty

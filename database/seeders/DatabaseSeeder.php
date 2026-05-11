@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         // JenisLapangan::factory(4)->create();
         // Lapangan::factory(4)->create();
-        BookingSeeder::factory(20)->create();
+        // BookingSeeder::factory(20)->create();
         
 
         // JenisLapangan::factory(4)->create();
