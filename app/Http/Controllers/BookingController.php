@@ -39,6 +39,61 @@ class BookingController extends Controller
         return view('admin.admindashboard', compact('query'));
     }
     
+ public function getBookedSlots(
+    $lapanganId,
+    $tanggal
+) {
+
+    $bookings = Booking::where(
+            'lapangan_id',
+            $lapanganId
+        )
+        ->where(
+            'tanggal',
+            $tanggal
+        )
+        ->get();
+
+    $bookedSlots = [];
+
+    foreach ($bookings as $booking) {
+
+        $mulai =
+            (int) substr(
+                $booking->jam_mulai,
+                0,
+                2
+            );
+
+        $selesai =
+            (int) substr(
+                $booking->jam_selesai,
+                0,
+                2
+            );
+
+        for (
+            $i = $mulai;
+            $i < $selesai;
+            $i++
+        ) {
+
+            $bookedSlots[] =
+                str_pad(
+                    $i,
+                    2,
+                    '0',
+                    STR_PAD_LEFT
+                ) . ':00';
+
+        }
+
+    }
+
+   return response()->json(
+    $bookedSlots
+);
+}
 
    public function create(Lapangan $lapangan)
 {

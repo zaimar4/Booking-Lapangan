@@ -45,6 +45,7 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
 
     Route::get('/daftar-booking', [AdminBookingController::class, 'index'])->name('admin.daftar-booking');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'update'])->name('admin.booking.update');
+  
 
 });
 Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function () {
@@ -78,6 +79,10 @@ Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function ()
     Route::get('/booking/{lapangan}/create', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
     Route::delete('/booking/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
+      Route::get(
+    '/booking/slots/{lapangan}/{tanggal}',
+    [BookingController::class, 'getBookedSlots']
+    );
 
 });
 Route::middleware('auth')->group(function () {
