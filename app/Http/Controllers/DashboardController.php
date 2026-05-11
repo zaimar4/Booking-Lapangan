@@ -9,14 +9,18 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index(LarapexChart $chart)
-    {
+    public function index(
+        LarapexChart $chart
+    ) {
 
-       
-
-        $bookingData = Booking::select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('COUNT(*) as total')
+        $bookingData =
+            Booking::select(
+                DB::raw(
+                    'MONTH(created_at) as bulan'
+                ),
+                DB::raw(
+                    'COUNT(*) as total'
+                )
             )
             ->groupBy('bulan')
             ->orderBy('bulan')
@@ -26,7 +30,9 @@ class DashboardController extends Controller
 
         $totalBooking = [];
 
-        foreach ($bookingData as $data) {
+        foreach (
+            $bookingData as $data
+        ) {
 
             $bulanBooking[] =
                 date(
@@ -40,24 +46,36 @@ class DashboardController extends Controller
                     )
                 );
 
-            $totalBooking[] = $data->total;
+            $totalBooking[] =
+                $data->total;
 
         }
 
-        $bookingChart = $chart->barChart()
-            ->setTitle('Total Booking Perbulan')
+        $bookingChart =
+            $chart->barChart()
+            ->setTitle(
+                'Total Booking Perbulan'
+            )
             ->addData(
                 $totalBooking
             )
-            ->setXAxis($bulanBooking);
+            ->setXAxis(
+                $bulanBooking
+            );
 
-        
-
-        $pendapatanData = Booking::select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('SUM(total_harga) as total')
+        $pendapatanData =
+            Booking::select(
+                DB::raw(
+                    'MONTH(created_at) as bulan'
+                ),
+                DB::raw(
+                    'SUM(total_harga) as total'
+                )
             )
-            ->where('status', 'approved')
+            ->where(
+                'status',
+                'approved'
+            )
             ->groupBy('bulan')
             ->orderBy('bulan')
             ->get();
@@ -66,7 +84,9 @@ class DashboardController extends Controller
 
         $totalPendapatan = [];
 
-        foreach ($pendapatanData as $data) {
+        foreach (
+            $pendapatanData as $data
+        ) {
 
             $bulanPendapatan[] =
                 date(
@@ -80,35 +100,50 @@ class DashboardController extends Controller
                     )
                 );
 
-            $totalPendapatan[] = $data->total;
+            $totalPendapatan[] =
+                $data->total;
 
         }
 
-        $pendapatanChart = $chart->lineChart()
-            ->setTitle('Total Pendapatan Perbulan')
+        $pendapatanChart =
+            $chart->lineChart()
+            ->setTitle(
+                'Total Pendapatan Perbulan'
+            )
             ->addData(
-                
                 $totalPendapatan
             )
-            ->setXAxis($bulanPendapatan);
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL KESELURUHAN
-        |--------------------------------------------------------------------------
-        */
+            ->setXAxis(
+                $bulanPendapatan
+            );
 
         $totalBookingSemua =
             Booking::count();
 
+        $bookingPending =
+            Booking::where(
+                'status',
+                'pending'
+            )->count();
+
         $totalPendapatanSemua =
             Booking::where(
-                    'status',
-                    'approved'
-                )
-                ->sum('total_harga');
-            $totalLapangan =Lapangan::count();
-            $bookings=Booking::with(['lapangan.jenisLapangan'])->latest()->paginate(10);
+                'status',
+                'approved'
+            )->sum(
+                'total_harga'
+            );
+
+        $totalLapangan =
+            Lapangan::count();
+
+        $bookings =
+            Booking::with([
+                'user',
+                'lapangan.jenisLapangan'
+            ])
+            ->latest()
+            ->paginate(10);
 
         return view(
             'admin.admindashboard',
@@ -116,10 +151,12 @@ class DashboardController extends Controller
                 'bookingChart',
                 'pendapatanChart',
                 'totalBookingSemua',
+                'bookingPending',
                 'totalPendapatanSemua',
                 'totalLapangan',
                 'bookings'
             )
         );
+
     }
 }

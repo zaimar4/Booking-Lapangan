@@ -126,7 +126,7 @@ class BookingController extends Controller
   public function store(Request $request)
 {
     $request->validate([
-        'lapangan_id' => 'required',
+        'lapangan_id' => 'required|exists:lapangans,id',
         'tanggal'     => 'required|date|after_or_equal:today',
         'slots'       => 'required|array|min:1',
     ], [
@@ -138,7 +138,6 @@ class BookingController extends Controller
     $slots = $request->slots;
 
     sort($slots);
-
 
     for ($i = 0; $i < count($slots) - 1; $i++) {
 
@@ -161,7 +160,6 @@ class BookingController extends Controller
 
     }
 
-
     $jamMulai = $slots[0];
 
     $jamTerakhir =
@@ -174,8 +172,6 @@ class BookingController extends Controller
             '0',
             STR_PAD_LEFT
         ) . ':00';
-
-   
 
     $bentrok = Booking::where(
             'lapangan_id',
@@ -213,6 +209,17 @@ class BookingController extends Controller
 
     }
 
+    $lapangan = Lapangan::findOrFail(
+        $request->lapangan_id
+    );
+
+    $durasi =
+        count($slots);
+
+    $totalHarga =
+        $durasi *
+        $lapangan->harga_sewa;
+
     Booking::create([
 
         'user_id'     => Auth::id(),
@@ -227,6 +234,8 @@ class BookingController extends Controller
 
         'status'      => 'pending',
 
+        'total_harga' => $totalHarga
+
     ]);
 
     return redirect()
@@ -236,7 +245,6 @@ class BookingController extends Controller
             'Booking berhasil dibuat'
         );
 }
-
     public function destroy(Booking $booking)
     {
         if ($booking->user_id !== Auth::id()) {

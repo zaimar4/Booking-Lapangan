@@ -6,7 +6,6 @@
 
 <div class="p-6 ml-60">
 
-    <!-- HEADER -->
     <div class="mb-8">
 
         <h1 class="text-3xl font-bold text-gray-800">
@@ -19,10 +18,8 @@
 
     </div>
 
-    <!-- STATISTIC CARD -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 
-        <!-- TOTAL LAPANGAN -->
         <div class="bg-white rounded-2xl shadow-md p-5 border">
 
             <p class="text-gray-500 text-sm">
@@ -37,7 +34,6 @@
 
         </div>
 
-        <!-- TOTAL BOOKING -->
         <div class="bg-white rounded-2xl shadow-md p-5 border">
 
             <p class="text-gray-500 text-sm">
@@ -46,13 +42,12 @@
 
             <h2 class="text-4xl font-bold text-blue-600 mt-3">
 
-                {{ $totalbooking ?? 0 }}
+                {{ $totalBookingSemua }}
 
             </h2>
 
         </div>
 
-        <!-- BOOKING PENDING -->
         <div class="bg-white rounded-2xl shadow-md p-5 border">
 
             <p class="text-gray-500 text-sm">
@@ -61,13 +56,12 @@
 
             <h2 class="text-4xl font-bold text-yellow-500 mt-3">
 
-                {{ $bookingpending ?? 0 }}
+                {{ $bookingPending }}
 
             </h2>
 
         </div>
 
-        <!-- TOTAL PENDAPATAN -->
         <div class="bg-white rounded-2xl shadow-md p-5 border">
 
             <p class="text-gray-500 text-sm">
@@ -76,7 +70,7 @@
 
             <h2 class="text-3xl font-bold text-purple-600 mt-3">
 
-                Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}
+                Rp {{ number_format($totalPendapatanSemua, 0, ',', '.') }}
 
             </h2>
 
@@ -84,10 +78,8 @@
 
     </div>
 
-    <!-- CHART -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
-        <!-- CHART BOOKING -->
         <div class="bg-white rounded-2xl shadow-md p-5 border">
 
             <h2 class="text-lg font-semibold text-gray-700 mb-5">
@@ -98,7 +90,6 @@
 
         </div>
 
-        <!-- CHART PENDAPATAN -->
         <div class="bg-white rounded-2xl shadow-md p-5 border">
 
             <h2 class="text-lg font-semibold text-gray-700 mb-5">
@@ -111,13 +102,12 @@
 
     </div>
 
-    <!-- TABLE BOOKING -->
     <div class="bg-white shadow-md rounded-2xl overflow-hidden border">
 
         <div class="p-5 border-b">
 
             <h2 class="text-lg font-semibold text-gray-700">
-                Booking Masuk (Pending)
+                Booking Masuk
             </h2>
 
         </div>
@@ -168,21 +158,18 @@
 
                     <tr class="border-b hover:bg-gray-50 transition">
 
-                        <!-- USER -->
                         <td class="px-4 py-3 font-medium">
 
                             {{ $item->user->name ?? 'User' }}
 
                         </td>
 
-                        <!-- LAPANGAN -->
                         <td class="px-4 py-3">
 
                             {{ $item->lapangan->nama_lapangan }}
 
                         </td>
 
-                        <!-- JENIS -->
                         <td class="px-4 py-3">
 
                             <span class="bg-gray-200 text-xs px-2 py-1 rounded">
@@ -193,14 +180,12 @@
 
                         </td>
 
-                        <!-- TANGGAL -->
                         <td class="px-4 py-3 text-gray-600">
 
                             {{ $item->tanggal }}
 
                         </td>
 
-                        <!-- JAM -->
                         <td class="px-4 py-3 text-gray-600">
 
                             {{ $item->jam_mulai }}
@@ -209,7 +194,6 @@
 
                         </td>
 
-                        <!-- STATUS -->
                         <td class="px-4 py-3">
 
                             @if($item->status == 'pending')
@@ -240,7 +224,6 @@
 
                         </td>
 
-                        <!-- TOTAL -->
                         <td class="px-4 py-3 font-semibold text-green-600">
 
                             Rp {{ number_format($item->total_harga ?? 0, 0, ',', '.') }}
@@ -273,7 +256,6 @@
 
 </div>
 
-<!-- APEXCHART -->
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 {{ $bookingChart->script() }}
