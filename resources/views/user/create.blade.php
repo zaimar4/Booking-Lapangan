@@ -1,43 +1,131 @@
 @extends('layouts.layout')
 
+@section('title', 'Booking Lapangan')
+
 @section('content')
 
-<div class="p-10">
+<div class="p-6 ml-60">
 
-    <h1 class="text-2xl font-bold mb-5">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">
         Booking Lapangan
     </h1>
 
-    <form action="{{ route('booking.store') }}" method="POST">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        @csrf
+        <!-- INFORMASI LAPANGAN -->
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
 
-        <input
-            type="hidden"
-            name="lapangan_id"
-            value="{{ $lapangan->id }}">
+            <img
+                src="{{ asset('images/' . $lapangan->gambar_lapangan) }}"
+                alt="{{ $lapangan->nama_lapangan }}"
+                class="w-full h-56 object-cover">
 
-        <p class="mb-3">
-            {{ $lapangan->nama_lapangan }}
-        </p>
+            <div class="p-5">
 
-        <input type="date" name="tanggal" class="border p-2">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                    {{ $lapangan->nama_lapangan }}
+                </h2>
 
-        <br><br>
+                <span class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">
+                    {{ $lapangan->jenisLapangan->nama_jenis }}
+                </span>
 
-        <input type="time" name="jam_mulai" class="border p-2">
+                <p class="text-gray-600 mt-4 text-sm">
+                    {{ $lapangan->deskripsi_lapangan }}
+                </p>
 
-        <br><br>
+                <div class="mt-5">
 
-        <input type="time" name="jam_selesai" class="border p-2">
+                    <p class="text-gray-500 text-sm">
+                        Harga Sewa
+                    </p>
 
-        <br><br>
+                    <h3 class="text-2xl font-bold text-green-600">
+                        Rp {{ number_format($lapangan->harga_sewa, 0, ',', '.') }}
+                    </h3>
 
-        <button class="bg-blue-500 text-white px-4 py-2 rounded">
-            Booking
-        </button>
+                </div>
 
-    </form>
+            </div>
+
+        </div>
+
+        <!-- FORM BOOKING -->
+        <div class="lg:col-span-2">
+
+            <div class="bg-white rounded-2xl shadow-md p-6">
+
+                <h2 class="text-xl font-semibold text-gray-700 mb-6">
+                    Form Booking
+                </h2>
+
+                <form action="{{ route('booking.store') }}" method="POST" class="space-y-5">
+
+                    @csrf
+
+                    <input
+                        type="hidden"
+                        name="lapangan_id"
+                        value="{{ $lapangan->id }}">
+
+                    <!-- TANGGAL -->
+                    <div>
+
+                        <label class="block text-gray-700 mb-2 font-medium">
+                            Tanggal Booking
+                        </label>
+
+                        <input
+                            type="date"
+                            name="tanggal"
+                            class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+                    </div>
+
+                    <!-- JAM MULAI -->
+                    <div>
+
+                        <label class="block text-gray-700 mb-2 font-medium">
+                            Jam Mulai
+                        </label>
+
+                        <input
+                            type="time"
+                            name="jam_mulai"
+                            class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+                    </div>
+
+                    <!-- JAM SELESAI -->
+                    <div>
+
+                        <label class="block text-gray-700 mb-2 font-medium">
+                            Jam Selesai
+                        </label>
+
+                        <input
+                            type="time"
+                            name="jam_selesai"
+                            class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <button
+                        type="submit"
+                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium transition">
+
+                        Booking Sekarang
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
