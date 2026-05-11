@@ -40,50 +40,147 @@ class BookingController extends Controller
     }
     
 
-    public function create(Lapangan $lapangan)
-    {
-        return view('user.create', compact('lapangan'));
-    }
+   public function create(Lapangan $lapangan)
+{
+    $bookings = Booking::where('lapangan_id', $lapangan->id)
+        ->where('tanggal', today())
+        ->get();
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'lapangan_id' => 'required',
-            'tanggal'     => 'required|date|after_or_equal:today',
-            'jam_mulai'   => 'required',
-            'jam_selesai' => 'required|after:jam_mulai',
-        ], [
-            'tanggal.after_or_equal' => 'Tanggal tidak boleh hari yang sudah lewat',
-            'jam_selesai.after'      => 'Jam selesai harus lebih dari jam mulai',
-        ]);
+    $bookedSlots = [];
 
-        $bentrok = Booking::where('lapangan_id', $request->lapangan_id)
-            ->where('tanggal', $request->tanggal)
-            ->where(function ($query) use ($request) {
-                $query->whereBetween('jam_mulai', [$request->jam_mulai, $request->jam_selesai])
-                      ->orWhereBetween('jam_selesai', [$request->jam_mulai, $request->jam_selesai])
-                      ->orWhere(function ($q) use ($request) {
-                          $q->where('jam_mulai', '<=', $request->jam_mulai)
-                            ->where('jam_selesai', '>=', $request->jam_selesai);
-                      });
-            })
-            ->exists();
+    foreach ($bookings as $booking) {
 
-        if ($bentrok) {
-            return back()->with('error', 'Jadwal sudah dibooking, pilih waktu lain.');
+        $mulai = (int) explode(':', $booking->jam_mulai)[0];
+
+        $selesai = (int) explode(':', $booking->jam_selesai)[0];
+
+        for ($i = $mulai; $i < $selesai; $i++) {
+
+            $bookedSlots[] = str_pad($i, 2, '0', STR_PAD_LEFT) . ':00';
+
         }
 
-        Booking::create([
-            'user_id'     => Auth::id(),
-            'lapangan_id' => $request->lapangan_id,
-            'tanggal'     => $request->tanggal,
-            'jam_mulai'   => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'status'      => 'pending',
-        ]);
-
-        return redirect()->route('booking.index')->with('success', 'Booking berhasil! Menunggu konfirmasi admin.');
     }
+
+    return view(
+        'user.create',
+        compact('lapangan', 'bookedSlots')
+    );
+}
+
+  public function store(Request $request)
+{
+    $request->validate([
+        'lapangan_id' => 'required',
+        'tanggal'     => 'required|date|after_or_equal:today',
+        'slots'       => 'required|array|min:1',
+    ], [
+        'tanggal.required'       => 'Tanggal wajib dipilih',
+        'tanggal.after_or_equal' => 'Tanggal tidak boleh hari yang sudah lewat',
+        'slots.required'         => 'Pilih minimal satu slot booking',
+    ]);
+
+    $slots = $request->slots;
+
+    sort($slots);
+
+
+    for ($i = 0; $i < count($slots) - 1; $i++) {
+
+        $current =
+            (int) explode(':', $slots[$i])[0];
+
+        $next =
+            (int) explode(':', $slots[$i + 1])[0];
+
+        if ($next !== $current + 1) {
+
+            return back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'Slot harus berurutan'
+                );
+
+        }
+
+    }
+
+
+    $jamMulai = $slots[0];
+
+    $jamTerakhir =
+        (int) explode(':', end($slots))[0];
+
+    $jamSelesai =
+        str_pad(
+            $jamTerakhir + 1,
+            2,
+            '0',
+            STR_PAD_LEFT
+        ) . ':00';
+
+   
+
+    $bentrok = Booking::where(
+            'lapangan_id',
+            $request->lapangan_id
+        )
+        ->where(
+            'tanggal',
+            $request->tanggal
+        )
+        ->where(function ($query)
+            use ($jamMulai, $jamSelesai) {
+
+            $query->where(
+                    'jam_mulai',
+                    '<',
+                    $jamSelesai
+                )
+                ->where(
+                    'jam_selesai',
+                    '>',
+                    $jamMulai
+                );
+
+        })
+        ->exists();
+
+    if ($bentrok) {
+
+        return back()
+            ->withInput()
+            ->with(
+                'error',
+                'Jadwal sudah dibooking'
+            );
+
+    }
+
+    Booking::create([
+
+        'user_id'     => Auth::id(),
+
+        'lapangan_id' => $request->lapangan_id,
+
+        'tanggal'     => $request->tanggal,
+
+        'jam_mulai'   => $jamMulai,
+
+        'jam_selesai' => $jamSelesai,
+
+        'status'      => 'pending',
+
+    ]);
+
+    return redirect()
+        ->route('booking.index')
+        ->with(
+            'success',
+            'Booking berhasil dibuat'
+        );
+}
 
     public function destroy(Booking $booking)
     {
