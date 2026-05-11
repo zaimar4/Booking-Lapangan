@@ -48,7 +48,26 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
 });
 Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('user.userdashboard');
+        $userId = Auth::id();
+
+        $totalBooking = \App\Models\Booking::where('user_id', $userId)->count();
+        $totalPending = \App\Models\Booking::where('user_id', $userId)->where('status', 'pending')->count();
+        $totalConfirmed = \App\Models\Booking::where('user_id', $userId)->where('status', 'confirmed')->count();
+        $totalCompleted = \App\Models\Booking::where('user_id', $userId)->where('status', 'completed')->count();
+
+        $bookingTerbaru = \App\Models\Booking::with('lapangan')
+            ->where('user_id', $userId)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('user.userdashboard', compact(
+            'totalBooking',
+            'totalPending',
+            'totalConfirmed',
+            'totalCompleted',
+            'bookingTerbaru'
+        ));
     })->name('user.dashboard');
     Route::get('/cari-lapangan', [LapanganController::class, 'getAll'])->name('user.cari-lapangan');
     Route::get('/detail-lapangan/{lapangan}', [LapanganController::class, 'show'])->name('user.detail-lapangan');
