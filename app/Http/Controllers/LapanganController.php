@@ -84,18 +84,30 @@ $view = Auth::user()->role == 'admin'
     }
 
   
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $lapangan = Lapangan::with('jenisLapangan')
-            ->latest()
-            ->paginate(10);
-
+        $query = Lapangan::with('jenisLapangan')->latest();
+ 
+        // Search
+        if ($request->filled('search')) {
+            $query->where('nama_lapangan', 'like', '%' . $request->search . '%');
+        }
+ 
+        // Filter jenis
+        if ($request->filled('jenis')) {
+            $query->where('jenis_lapangan', $request->jenis);
+        }
+ 
         $jenis_lapangan = JenisLapangan::all();
-        $totalLapangan = Lapangan::count();
-          $view=Auth::user()->role == 'admin' ? 'admin.adminsemualapangan' : 'user.temukanlapangan';
-
-
-        return view($view, compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
+        $totalLapangan  = Lapangan::count();
+ 
+        if (Auth::user()->role === 'admin') {
+            $lapangan = $query->paginate(10)->withQueryString();
+            return view('admin.adminsemualapangan', compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
+        }
+ 
+        $lapangan = $query->paginate(9)->withQueryString();
+        return view('user.temukanlapangan', compact('lapangan', 'jenis_lapangan'));
     }
 
     /**
