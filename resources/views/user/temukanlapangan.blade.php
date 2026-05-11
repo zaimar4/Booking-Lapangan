@@ -7,7 +7,6 @@
 <div class="bg-gray-50 min-h-screen py-10">
     <div class="container mx-auto px-4">
 
-        <x-sidenavbar />
 
         <div class="mb-8">
             <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900">
@@ -74,7 +73,9 @@
                             </button>
 
                             <button class="px-4 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50">
-                                Detail
+                                <a href="{{ route('user.detail-lapangan', $item->id) }}">
+                                    Detail
+                                </a>
                             </button>
                         </div>
 

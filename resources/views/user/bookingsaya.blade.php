@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="flex">
-    <x-sidenavbar />
 
     <div class="flex-1 p-8 ml-64">
 
