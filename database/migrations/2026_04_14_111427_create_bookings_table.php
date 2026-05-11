@@ -24,6 +24,7 @@ return new class extends Migration
     'completed',
     'cancelled'
 ])->default('pending');
+            $table->decimal('total_harga', 10, 2)->nullable();
             $table->timestamps();
         });
     }
