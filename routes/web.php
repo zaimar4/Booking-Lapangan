@@ -50,7 +50,7 @@ Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function ()
     Route::get('/dashboard', function () {
         return view('user.userdashboard');
     })->name('user.dashboard');
-    Route::get('/cari-lapangan', [BookingController::class, 'index'])->name('user.cari-lapangan');
+    Route::get('/cari-lapangan', [LapanganController::class, 'getAll'])->name('user.cari-lapangan');
     Route::get('/booking/{lapangan}', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/booking-saya', [BookingController::class, 'index'])->name('booking.index');

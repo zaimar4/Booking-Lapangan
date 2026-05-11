@@ -4,70 +4,97 @@
 
 @section('content')
 
-<div class="bg-gray-50 min-h-screen py-12">
+<div class="bg-gray-50 min-h-screen py-10">
     <div class="container mx-auto px-4">
-        
-        <div class="mb-12">
-            <h1 class="text-4xl font-black text-gray-900 tracking-tight">
+
+        <x-sidenavbar />
+
+        <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900">
                 Katalog Lapangan
             </h1>
-            <p class="text-gray-500 mt-2 text-lg">Pilih dan sewa lapangan favoritmu dengan mudah.</p>
+
+            <p class="text-gray-500 mt-2">
+                Pilih lapangan terbaik untuk olahraga kamu
+            </p>
+
+            @if(request('search'))
+                <p class="mt-3 text-sm text-gray-600">
+                    Hasil pencarian: 
+                    <span class="font-semibold text-green-600">
+                        "{{ request('search') }}"
+                    </span>
+                </p>
+            @endif
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @if($lapangan->count() > 0)
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
             @foreach ($lapangan as $item)
-                <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                    
-                    <div class="relative overflow-hidden">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition group">
+
+                    <div class="relative">
                         @if($item->gambar_lapangan)
                             <img src="{{ asset('images/' . $item->gambar_lapangan) }}"
-                                 class="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                                 class="w-full h-56 object-cover group-hover:scale-105 transition duration-300"
                                  alt="{{ $item->nama_lapangan }}">
                         @else
-                            <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                                <span class="text-gray-400 font-medium text-sm italic">Foto tidak tersedia</span>
+                            <div class="w-full h-56 bg-gray-200 flex items-center justify-center">
+                                <span class="text-gray-400 text-sm">Tidak ada gambar</span>
                             </div>
                         @endif
-                        
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-white/90 backdrop-blur-sm text-green-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
-                                {{ $item->jenisLapangan->nama_jenis ?? 'General' }}
+
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-black/70 text-white text-[10px] px-3 py-1 rounded-full">
+                                {{ $item->jenisLapangan->nama_jenis ?? 'Umum' }}
                             </span>
                         </div>
                     </div>
 
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3 class="text-xl font-bold text-gray-800 leading-tight">
-                                {{ $item->nama_lapangan }}
-                            </h3>
-                        </div>
+                    <div class="p-5">
 
-                        <div class="flex items-baseline gap-1 mb-4">
-                            <span class="text-2xl font-black text-green-600">
-                                Rp{{ number_format($item->harga_sewa, 0, ',', '.') }}
-                            </span>
-                            <span class="text-gray-400 text-sm">/jam</span>
-                        </div>
+                        <h3 class="font-bold text-lg text-gray-800">
+                            {{ $item->nama_lapangan }}
+                        </h3>
 
-                        <p class="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-6">
+                        <p class="text-green-600 font-extrabold mt-2">
+                            Rp{{ number_format($item->harga_sewa, 0, ',', '.') }}
+                            <span class="text-gray-400 font-normal text-sm">/jam</span>
+                        </p>
+
+                        <p class="text-gray-500 text-sm mt-3 line-clamp-2">
                             {{ $item->deskripsi_lapangan }}
                         </p>
 
-                        <div class="flex items-center gap-3 mt-auto">
-                            <a href="{{ route('user.detail-lapangan', $item->id) }}"
-                               class="flex-1 text-center py-3 rounded-2xl border-2 border-gray-100 text-gray-600 font-bold hover:bg-gray-50 transition-colors">
-                                Detail
-                            </a>
+                        <div class="mt-5 flex gap-2">
+                            <button class="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold py-2.5 rounded-xl transition">
+                                Booking
+                            </button>
 
-                            <button class="flex-[2] bg-green-500 text-white font-bold py-3 rounded-2xl hover:bg-green-600 hover:shadow-lg hover:shadow-green-200 transition-all">
-                                Booking Sekarang
+                            <button class="px-4 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50">
+                                Detail
                             </button>
                         </div>
+
                     </div>
+
                 </div>
             @endforeach
+
         </div>
+
+        @else
+            <div class="text-center py-20">
+                <p class="text-gray-400 text-lg">
+                    Lapangan tidak ditemukan 😢
+                </p>
+                <p class="text-sm text-gray-500 mt-2">
+                    Coba gunakan kata kunci lain
+                </p>
+            </div>
+        @endif
 
     </div>
 </div>

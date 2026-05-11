@@ -13,8 +13,18 @@
 </head>
 <body class="bg-gray-50">
     
-    <main class="flex h-screen">
+<main class="flex min-h-screen">
+
+    <div class="w-64">
+        <x-sidenavbar />
+    </div>
+
+    <div class="flex-1 p-6">
         @yield('content')
-    </main>
+    </div>
+
+</main>
+
+</body>
 </body>
 </html>
