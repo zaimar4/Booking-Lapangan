@@ -35,6 +35,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::where('lapangan_id', $lapanganId)
             ->where('tanggal', $tanggal)
+            ->whereIn('status', ['pending', 'confirmed'])
             ->get();
 
         $bookedSlots = [];
@@ -55,6 +56,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::where('lapangan_id', $lapangan->id)
             ->where('tanggal', today())
+            ->whereIn('status', ['pending', 'confirmed'])
             ->get();
 
         $bookedSlots = [];
@@ -101,6 +103,7 @@ class BookingController extends Controller
 
         $bentrok = Booking::where('lapangan_id', $request->lapangan_id)
             ->where('tanggal', $request->tanggal)
+            ->whereIn('status', ['pending', 'confirmed'])
             ->where(function ($query) use ($jamMulai, $jamSelesai) {
                 $query->where('jam_mulai', '<', $jamSelesai)
                       ->where('jam_selesai', '>', $jamMulai);
@@ -111,8 +114,8 @@ class BookingController extends Controller
             return back()->withInput()->with('error', 'Jadwal sudah dibooking');
         }
 
-        $lapangan  = Lapangan::findOrFail($request->lapangan_id);
-        $durasi    = count($slots);
+        $lapangan   = Lapangan::findOrFail($request->lapangan_id);
+        $durasi     = count($slots);
         $totalHarga = $durasi * $lapangan->harga_sewa;
 
         Booking::create([
