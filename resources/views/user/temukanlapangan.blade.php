@@ -26,7 +26,7 @@
             </div>
 
             <select name="jenis"
-                    class="px-4 py-2.5 border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 bg-white text-zinc-700">
+                    class="pl-4 pr-10 py-2.5 border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 bg-white text-zinc-700">
                 <option value="">Semua Jenis</option>
                 @foreach($jenis_lapangan as $jenis)
                     <option value="{{ $jenis->id }}" {{ request('jenis') == $jenis->id ? 'selected' : '' }}>

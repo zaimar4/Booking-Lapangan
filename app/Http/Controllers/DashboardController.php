@@ -13,9 +13,9 @@ class DashboardController extends Controller
     {
         // ── Grafik Total Booking Perbulan ──────────────────────────────────────
         $bookingData = Booking::select(
-                DB::raw('MONTH(created_at) as bulan'),
-                DB::raw('COUNT(*) as total')
-            )
+            DB::raw('MONTH(created_at) as bulan'),
+            DB::raw('COUNT(*) as total')
+        )
             ->groupBy('bulan')
             ->orderBy('bulan')
             ->get();
@@ -23,7 +23,7 @@ class DashboardController extends Controller
         $bulanBooking = [];
         $jumlahBooking = [];
         foreach ($bookingData as $data) {
-            $bulanBooking[]  = date('F', mktime(0, 0, 0, $data->bulan, 1));
+            $bulanBooking[] = date('F', mktime(0, 0, 0, $data->bulan, 1));
             $jumlahBooking[] = $data->total;
         }
 
@@ -33,12 +33,12 @@ class DashboardController extends Controller
             ->setXAxis($bulanBooking);
 
         $pendapatanData = Booking::select(
-                DB::raw('MONTH(bookings.created_at) as bulan'),
-                DB::raw('SUM(
+            DB::raw('MONTH(bookings.created_at) as bulan'),
+            DB::raw('SUM(
                     lapangans.harga_sewa *
                     TIMESTAMPDIFF(HOUR, bookings.jam_mulai, bookings.jam_selesai)
                 ) as total')
-            )
+        )
             ->join('lapangans', 'lapangans.id', '=', 'bookings.lapangan_id')
             ->whereIn('bookings.status', ['confirmed', 'completed'])
             ->groupBy('bulan')
@@ -53,14 +53,14 @@ class DashboardController extends Controller
         }
 
         $pendapatanChart = $chart->barChart()
-    ->setTitle('Total Pendapatan Perbulan')
-    ->addData($nilaiPendapatan)
-    ->setXAxis($bulanPendapatan);
-    
+            ->setTitle('Total Pendapatan Perbulan')
+            ->addData($nilaiPendapatan)
+            ->setXAxis($bulanPendapatan);
+
         // ── Summary Cards ──────────────────────────────────────────────────────
         $totalBookingSemua = Booking::count();
-        $bookingPending    = Booking::where('status', 'pending')->count();
-        $totalLapangan     = Lapangan::count();
+        $bookingPending = Booking::where('status', 'pending')->count();
+        $totalLapangan = Lapangan::count();
 
         // Total pendapatan = harga_sewa * durasi untuk booking confirmed/completed
         $totalPendapatanSemua = Booking::join('lapangans', 'lapangans.id', '=', 'bookings.lapangan_id')
