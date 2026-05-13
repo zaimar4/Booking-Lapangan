@@ -81,27 +81,36 @@
     </li>
 
     <li>
+<<<<<<< HEAD
         <a href="{{ route('booking.index') }}"
            class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
+=======
+    <a href="{{ route('user.booking') }}"
+       class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
+>>>>>>> ceaa096 (.)
 
-            <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"
-                 xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke="currentColor">
+        <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"
+             xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor">
 
-                <path stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
 
-            <span class="ms-3">Booking Saya</span>
-        </a>
-    </li>
+        <span class="ms-3">Booking Saya</span>
+    </a>
+</li>
 
     <li>
+<<<<<<< HEAD
         <a href="{{ route('booking.index') }}"
+=======
+        <a href="{{ route('user.cari-lapangan') }}"   
+>>>>>>> ceaa096 (.)
            class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
 
             <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"

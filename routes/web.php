@@ -71,6 +71,7 @@ Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function ()
             'bookingTerbaru'
         ));
     })->name('user.dashboard');
+<<<<<<< HEAD
     Route::get('/cari-lapangan', [LapanganController::class, 'getAll'])->name('user.cari-lapangan');
     Route::get('/detail-lapangan/{lapangan}', [LapanganController::class, 'show'])->name('user.detail-lapangan');
     Route::get('/booking/{lapangan}', [BookingController::class, 'create'])->name('booking.create');
@@ -83,6 +84,20 @@ Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function ()
     '/booking/slots/{lapangan}/{tanggal}',
     [BookingController::class, 'getBookedSlots']
     );
+=======
+
+    Route::get('/cari-lapangan', [BookingController::class, 'index'])
+        ->name('user.cari-lapangan');
+
+    Route::get('/booking/{lapangan}', [BookingController::class, 'create'])
+        ->name('booking.create');
+
+    Route::post('/booking/store', [BookingController::class, 'store'])
+        ->name('booking.store');
+        
+    Route::get('/booking-saya', [BookingController::class, 'myBooking'])
+    ->name('user.booking');
+>>>>>>> ceaa096 (.)
 
 });
 Route::middleware('auth')->group(function () {

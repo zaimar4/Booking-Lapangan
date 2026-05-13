@@ -21,7 +21,7 @@
                     src="{{ asset('images/' . $item->gambar_lapangan) }}"
                     class="w-full h-40 object-cover rounded">
 
-                <h2 class="text-xl font-bold mt-2">
+                <h2 class="text-xl font-bold mt-2"> 
                     {{ $item->nama_lapangan }}
                 </h2>
 

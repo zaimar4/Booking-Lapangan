@@ -52,6 +52,7 @@ class BookingController extends Controller
         return response()->json($bookedSlots);
     }
 
+<<<<<<< HEAD
     public function create(Lapangan $lapangan)
     {
         $bookings = Booking::where('lapangan_id', $lapangan->id)
@@ -72,6 +73,14 @@ class BookingController extends Controller
 
         return view('user.create', compact('lapangan', 'bookedSlots'));
     }
+=======
+    public function create()
+{
+    $lapangan = Lapangan::all();
+
+    return view('booking.create', compact('lapangan'));
+}
+>>>>>>> ceaa096 (.)
 
     public function store(Request $request)
     {
@@ -145,4 +154,14 @@ class BookingController extends Controller
 
         return back()->with('success', 'Booking berhasil dibatalkan.');
     }
+
+    public function myBooking()
+{
+    $bookings = Booking::where('user_id', Auth::id())->get();
+
+    return view('user.booking-saya', compact('bookings'));
+}
+
+
+
 }
