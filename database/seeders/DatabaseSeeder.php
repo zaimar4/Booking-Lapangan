@@ -20,14 +20,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-<<<<<<< HEAD
+
         // User::factory()->create([
         //     'name' => 'admin',
         //     'email' => 'admin2@example.com',
         //     'role' => 'admin',
         //     'password' => bcrypt('123456789'),
         // ]);
-=======
+
 
         User::factory()->create([
             'name' => 'admin',
@@ -36,7 +36,6 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123456789'),
         ]);
 
->>>>>>> ceaa096 (.)
         // User::factory()->create([
         //     'name' => 'admin',
         //     'email' => 'admin@example.com',
@@ -48,12 +47,12 @@ class DatabaseSeeder extends Seeder
         // BookingSeeder::factory(20)->create();
         
 
-<<<<<<< HEAD
+
         // JenisLapangan::factory(4)->create();
     //    Lapangan::factory(4)->create();
-=======
+
         JenisLapangan::factory(4)->create();
 
->>>>>>> ceaa096 (.)
+
     }
 }
