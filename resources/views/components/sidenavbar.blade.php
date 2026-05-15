@@ -81,13 +81,8 @@
     </li>
 
     <li>
-<<<<<<< HEAD
         <a href="{{ route('booking.index') }}"
            class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
-=======
-    <a href="{{ route('user.booking') }}"
-       class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
->>>>>>> ceaa096 (.)
 
         <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"
              xmlns="http://www.w3.org/2000/svg"
@@ -106,11 +101,7 @@
 </li>
 
     <li>
-<<<<<<< HEAD
         <a href="{{ route('booking.index') }}"
-=======
-        <a href="{{ route('user.cari-lapangan') }}"   
->>>>>>> ceaa096 (.)
            class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
 
             <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-900"

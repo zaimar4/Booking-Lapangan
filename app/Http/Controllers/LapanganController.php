@@ -99,7 +99,6 @@ $view = Auth::user()->role == 'admin'
         }
  
         $jenis_lapangan = JenisLapangan::all();
-<<<<<<< HEAD
         $totalLapangan  = Lapangan::count();
  
         if (Auth::user()->role === 'admin') {
@@ -109,13 +108,6 @@ $view = Auth::user()->role == 'admin'
  
         $lapangan = $query->paginate(9)->withQueryString();
         return view('user.temukanlapangan', compact('lapangan', 'jenis_lapangan'));
-=======
-        $totalLapangan = Lapangan::count();
-          $view=Auth::user()->role == 'admin' ? 'admin.adminsemualapangan' : 'user.cari-lapangan';
-
-
-        return view($view, compact('lapangan', 'totalLapangan', 'jenis_lapangan'));
->>>>>>> ceaa096 (.)
     }
 
     /**
