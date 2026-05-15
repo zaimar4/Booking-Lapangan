@@ -11,7 +11,6 @@ class DashboardController extends Controller
 {
     public function index(LarapexChart $chart)
     {
-        // ── Grafik Total Booking Perbulan ──────────────────────────────────────
         $bookingData = Booking::select(
             DB::raw('MONTH(created_at) as bulan'),
             DB::raw('COUNT(*) as total')

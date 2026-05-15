@@ -119,17 +119,27 @@ class BookingController extends Controller
         $durasi     = count($slots);
         $totalHarga = $durasi * $lapangan->harga_sewa;
 
-        Booking::create([
-            'user_id'     => Auth::id(),
-            'lapangan_id' => $request->lapangan_id,
-            'tanggal'     => $request->tanggal,
-            'jam_mulai'   => $jamMulai,
-            'jam_selesai' => $jamSelesai,
-            'status'      => 'pending',
-            'total_harga' => $totalHarga,
-        ]);
+        $booking = Booking::create([
+    'user_id'     => Auth::id(),
+    'lapangan_id' => $request->lapangan_id,
+    'tanggal'     => $request->tanggal,
+    'jam_mulai'   => $jamMulai,
+    'jam_selesai' => $jamSelesai,
+    'status'      => 'pending',
+    'total_harga' => $totalHarga,
+]);
+        
 
-        return redirect()->route('booking.index')->with('success', 'Booking berhasil dibuat');
+        $pesan = "Halo saya mau melakukan pembayaran\n\n";
+$pesan .= "Nama Lapangan : ".$lapangan->nama_lapangan."\n";
+$pesan .= "Nama : ".Auth::user()->name."\n";
+$pesan .= "Harga : Rp".number_format($booking->total_harga,0,',','.')."\n";
+$pesan .= "Tanggal : ".$booking->tanggal."\n";
+$pesan .= "Jam : ".$booking->jam_mulai." - ".$booking->jam_selesai;
+
+$url = "https://wa.me/+6283851072814?text=".urlencode($pesan);
+
+return redirect($url);
     }
 
     public function destroy(Booking $booking)

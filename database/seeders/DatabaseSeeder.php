@@ -37,6 +37,5 @@ class DatabaseSeeder extends Seeder
         Booking::factory(20)->create();
         
 
-
     }
 }
