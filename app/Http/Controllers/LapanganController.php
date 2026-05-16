@@ -15,7 +15,7 @@ class LapanganController extends Controller
      */
     public function index()
     {
-        $query = Lapangan::with('jenisLapangan');
+        $query = lapangan::with('jenisLapangan');
 
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
@@ -71,7 +71,7 @@ $view = Auth::user()->role == 'admin'
         $gambar->move(public_path('images'), $nama_gambar);
 
       
-        Lapangan::create([
+        lapangan::create([
             'nama_lapangan' => $request->nama_lapangan,
             'jenis_lapangan' => $request->jenis_lapangan,
             'gambar_lapangan' => $nama_gambar,
@@ -86,7 +86,7 @@ $view = Auth::user()->role == 'admin'
   
     public function getAll(Request $request)
     {
-        $query = Lapangan::with('jenisLapangan')->latest();
+        $query = lapangan::with('jenisLapangan')->latest();
  
         // Search
         if ($request->filled('search')) {
@@ -99,7 +99,7 @@ $view = Auth::user()->role == 'admin'
         }
  
         $jenis_lapangan = JenisLapangan::all();
-        $totalLapangan  = Lapangan::count();
+        $totalLapangan  = lapangan::count();
  
         if (Auth::user()->role === 'admin') {
             $lapangan = $query->paginate(10)->withQueryString();
@@ -113,7 +113,7 @@ $view = Auth::user()->role == 'admin'
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Lapangan $lapangan)
+    public function edit(lapangan $lapangan)
     {
         $jenis_lapangan = JenisLapangan::all();
 
@@ -123,7 +123,7 @@ $view = Auth::user()->role == 'admin'
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Lapangan $lapangan)
+    public function update(Request $request, lapangan $lapangan)
     {
         $request->validate([
             'nama_lapangan' => 'sometimes|required',
@@ -158,7 +158,7 @@ $view = Auth::user()->role == 'admin'
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lapangan $lapangan)
+    public function destroy(lapangan $lapangan)
     {
         if ($lapangan->gambar_lapangan && file_exists(public_path('images/' . $lapangan->gambar_lapangan))) {
             unlink(public_path('images/' . $lapangan->gambar_lapangan));

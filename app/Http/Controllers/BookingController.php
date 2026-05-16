@@ -52,7 +52,7 @@ class BookingController extends Controller
         return response()->json($bookedSlots);
     }
 
-    public function create(Lapangan $lapangan)
+    public function create(lapangan $lapangan)
     {
         $bookings = Booking::where('lapangan_id', $lapangan->id)
             ->where('tanggal', today())
@@ -115,7 +115,7 @@ class BookingController extends Controller
             return back()->withInput()->with('error', 'Jadwal sudah dibooking');
         }
 
-        $lapangan   = Lapangan::findOrFail($request->lapangan_id);
+        $lapangan   = lapangan::findOrFail($request->lapangan_id);
         $durasi     = count($slots);
         $totalHarga = $durasi * $lapangan->harga_sewa;
 
