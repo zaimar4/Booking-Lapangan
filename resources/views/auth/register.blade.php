@@ -77,7 +77,7 @@
     @php
         $stats = [
             ['+' . App\Models\User::count(), 'Pengguna Aktif'],
-            ['+' . App\Models\Lapangan::count(), 'Total Lapangan'],
+            ['+' . App\Models\lapangan::count(), 'Total Lapangan'],
             ['+' . App\Models\Booking::count(), 'Bookings']
         ];
     @endphp
