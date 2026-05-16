@@ -15,6 +15,8 @@ class Lapangan extends Model
         'gambar_lapangan',
         'deskripsi_lapangan',
         'harga_sewa',
+        'jam_buka',
+        'jam_tutup'
     ];
     public function booking()
     {

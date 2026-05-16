@@ -50,6 +50,8 @@ class LapanganController extends Controller
             'nama_lapangan' => 'required',
             'jenis_lapangan' => 'required',
             'gambar_lapangan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'jam_buka' => 'required',
+            'jam_tutup'=> 'required|after:jam_buka',
             'harga_sewa' => 'required|numeric|min:0',
         ], [
             'harga_sewa.min' => 'Harga Tidak Boleh Minus'
@@ -68,6 +70,8 @@ class LapanganController extends Controller
             'gambar_lapangan' => $imageUrl,
             'deskripsi_lapangan' => $request->deskripsi_lapangan,
             'harga_sewa' => $request->harga_sewa,
+            'jam_buka' => $request->jam_buka,
+            'jam_tutup'=> $request->jam_tutup
         ]);
 
         return redirect()->route('admin.dashboard')

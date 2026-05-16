@@ -30,6 +30,26 @@
         </div>
     @endif
 
+    {{-- Info lapangan --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-4 sm:p-5 mb-4 flex items-center gap-4">
+        @if($lapangan->gambar_lapangan)
+            <img src="{{ asset('images/' . $lapangan->gambar_lapangan) }}"
+                 class="w-16 h-16 rounded-xl object-cover flex-shrink-0" alt="{{ $lapangan->nama_lapangan }}">
+        @endif
+        <div>
+            <h2 class="font-bold text-zinc-900 text-base">{{ $lapangan->nama_lapangan }}</h2>
+            <p class="text-sm text-zinc-500 mt-0.5">
+                Jam Operasional:
+                <span class="font-semibold text-zinc-700">
+                    {{ \Illuminate\Support\Str::substr($lapangan->jam_buka, 0, 5) }} – {{ \Illuminate\Support\Str::substr($lapangan->jam_tutup, 0, 5) }}
+                </span>
+            </p>
+            <p class="text-sm text-green-600 font-semibold mt-0.5">
+                Rp{{ number_format($lapangan->harga_sewa, 0, ',', '.') }} / jam
+            </p>
+        </div>
+    </div>
+
     <div class="bg-white rounded-2xl shadow-md p-4 sm:p-6">
 
         <form action="{{ route('booking.store') }}" method="POST">
@@ -53,17 +73,26 @@
             <div class="mb-5 sm:mb-6">
                 <label class="block mb-3 sm:mb-4 font-semibold text-gray-700 text-sm sm:text-base">Pilih Jam Booking</label>
 
+                {{--
+                    Slot dirender dari $availableSlots yang dikirim controller
+                    (sudah sesuai jam_buka s/d jam_tutup lapangan).
+                    Slot yang sudah lewat (hari ini) dinonaktifkan via JS setelah render.
+                --}}
                 <div id="slotContainer" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 sm:gap-3">
-                    @for($i = 8; $i < 22; $i++)
-                        @php $jam = str_pad($i, 2, '0', STR_PAD_LEFT) . ':00'; @endphp
+                    @foreach($availableSlots as $jam)
                         <button
                             type="button"
                             data-jam="{{ $jam }}"
                             class="slot-btn border rounded-xl py-2.5 sm:py-3 text-sm font-semibold transition hover:bg-blue-100">
                             {{ $jam }}
                         </button>
-                    @endfor
+                    @endforeach
                 </div>
+
+                {{-- Jika tidak ada slot sama sekali (lapangan tutup / jam_buka == jam_tutup) --}}
+                @if(empty($availableSlots))
+                    <p class="text-sm text-zinc-500 mt-3">Tidak ada slot tersedia untuk lapangan ini.</p>
+                @endif
 
                 <div class="flex flex-wrap gap-3 sm:gap-5 mt-4 sm:mt-5 text-xs sm:text-sm">
                     <div class="flex items-center gap-2">
@@ -73,6 +102,10 @@
                     <div class="flex items-center gap-2">
                         <div class="w-4 h-4 sm:w-5 sm:h-5 bg-red-500 rounded"></div>
                         <span>Sudah Dibooking</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 sm:w-5 sm:h-5 bg-zinc-300 rounded"></div>
+                        <span>Sudah Lewat</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <div class="w-4 h-4 sm:w-5 sm:h-5 border rounded"></div>
@@ -113,11 +146,42 @@
     const durasiText   = document.getElementById('durasi');
     const hargaText    = document.getElementById('harga');
 
+    // Jam sekarang (server-side agar konsisten dengan timezone aplikasi)
+    const nowHour      = {{ (int) now()->format('H') }};
+    const todayStr     = '{{ now()->toDateString() }}';
+
     let selectedSlots = [];
 
     const CLASS_DEFAULT  = 'slot-btn border rounded-xl py-2.5 sm:py-3 text-sm font-semibold transition hover:bg-blue-100';
     const CLASS_SELECTED = 'slot-btn border border-blue-500 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-blue-500 text-white';
     const CLASS_BOOKED   = 'slot-btn border border-red-500 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-red-500 text-white cursor-not-allowed';
+    const CLASS_PAST     = 'slot-btn border border-zinc-300 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-zinc-200 text-zinc-400 cursor-not-allowed';
+
+    function markPastSlots() {
+        const isToday = tanggalInput.value === todayStr;
+        const buttons = document.querySelectorAll('.slot-btn');
+
+        buttons.forEach(btn => {
+            // Jangan sentuh slot yang sudah dibooking (merah)
+            if (btn.dataset.status === 'booked') return;
+
+            const slotHour = parseInt(btn.dataset.jam);
+
+            if (isToday && slotHour <= nowHour) {
+                btn.disabled    = true;
+                btn.className   = CLASS_PAST;
+                btn.title       = 'Jam ini sudah lewat';
+                // Kalau slot ini terlanjur dipilih, hapus dari selectedSlots
+                selectedSlots   = selectedSlots.filter(s => s !== btn.dataset.jam);
+            } else if (!btn.dataset.status) {
+                btn.disabled    = false;
+                btn.className   = CLASS_DEFAULT;
+                btn.title       = '';
+            }
+        });
+
+        updateBooking();
+    }
 
     async function loadBookedSlots() {
         const tanggal = tanggalInput.value;
@@ -128,20 +192,28 @@
             const bookedSlots = await response.json();
             const buttons     = document.querySelectorAll('.slot-btn');
 
+            // Reset semua slot dulu
             buttons.forEach(btn => {
+                delete btn.dataset.status;
                 btn.disabled  = false;
                 btn.className = CLASS_DEFAULT;
+                btn.title     = '';
             });
 
             selectedSlots = [];
-            updateBooking();
 
+            // Tandai slot yang sudah dibooking
             buttons.forEach(btn => {
                 if (bookedSlots.includes(btn.dataset.jam)) {
-                    btn.disabled  = true;
-                    btn.className = CLASS_BOOKED;
+                    btn.disabled        = true;
+                    btn.className       = CLASS_BOOKED;
+                    btn.dataset.status  = 'booked';
+                    btn.title           = 'Sudah dibooking';
                 }
             });
+
+            // Tandai slot yang sudah lewat (harus setelah booked agar tidak override)
+            markPastSlots();
 
         } catch (error) {
             console.error(error);
@@ -163,7 +235,7 @@
             const temp = [...selectedSlots, jam].sort();
 
             if (!isSequential(temp)) {
-                alert('Slot harus berurutan');
+                alert('Slot harus berurutan! Pilih jam yang sambung-menyambung.');
                 return;
             }
 
@@ -182,6 +254,12 @@
     }
 
     function updateBooking() {
+        // Sinkronkan warna selected slot (bisa berubah setelah reset)
+        document.querySelectorAll('.slot-btn').forEach(btn => {
+            if (btn.dataset.status === 'booked' || btn.disabled) return;
+            btn.className = selectedSlots.includes(btn.dataset.jam) ? CLASS_SELECTED : CLASS_DEFAULT;
+        });
+
         hiddenSlots.innerHTML = selectedSlots
             .map(slot => `<input type="hidden" name="slots[]" value="${slot}">`)
             .join('');
@@ -191,6 +269,8 @@
     }
 
     tanggalInput.addEventListener('change', loadBookedSlots);
+
+    // Jalankan saat pertama load
     loadBookedSlots();
 </script>
 
