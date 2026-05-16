@@ -15,29 +15,34 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    public function boot(): void
-    {
-        
+public function boot(): void
+{
     if (config('app.env') === 'production') {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
-        }
+        \Illuminate\Support\Facades\URL::forceScheme('https');
+    }
 
-        // Bagikan data ke semua view secara otomatis
-        View::composer('*', function ($view) {
-            try {
-                $view->with([
+    // 1. Ganti '*' menjadi view yang benar-benar membutuhkan data ini saja
+    // Pastikan nama view/component sesuai dengan file kamu (misal: layouts.layout atau components.sidenavbar)
+    View::composer(['layouts.layout', 'components.sidenavbar'], function ($view) {
+        try {
+            // 2. Gunakan Cache agar tidak hit database setiap detik
+            // Data akan disimpan di memori selama 5 menit (300 detik)
+            $stats = cache()->remember('admin_sidebar_stats', 300, function () {
+                return [
                     'totalLapangan' => Lapangan::count(),
                     'totalBooking'  => Booking::count(),
-                    'totalCategory' => JenisLapangan::count(), // Sesuaikan nama modelnya
-                ]);
-            } catch (\Exception $e) {
-                // Supaya tidak error saat database belum siap/kosong
-                $view->with([
-                    'totalLapangan' => 0,
-                    'totalBooking'  => 0,
-                    'totalCategory' => 0,
-                ]);
-            }
-        });
-    }
+                    'totalCategory' => JenisLapangan::count(),
+                ];
+            });
+
+            $view->with($stats);
+        } catch (\Exception $e) {
+            $view->with([
+                'totalLapangan' => 0,
+                'totalBooking'  => 0,
+                'totalCategory' => 0,
+            ]);
+        }
+    });
+}
 }
