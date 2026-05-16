@@ -31,18 +31,19 @@ Route::get('/dashboard', function () {
 
 Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
     Route::get('/tambah-lapangan', [LapanganController::class, 'create'])->name('admin.tambah-lapangan');
     Route::post('tambah-lapangan', [LapanganController::class, 'store'])->name('admin.store-lapangan');
     Route::get('/semua-lapangan', [LapanganController::class, 'getAll'])->name('admin.semua-lapangan');
+    Route::get('/edit/{lapangan}', [LapanganController::class, 'edit'])->name('edit-lapangan');
+    Route::get('/detail/{lapangan}', [LapanganController::class, 'show'])->name('detail-lapangan');
+    Route::delete('/delete/{lapangan}', [LapanganController::class, 'destroy'])->name('delete-lapangan');
+    Route::patch('/update/{lapangan}', [LapanganController::class, 'update'])->name('update-lapangan');
 
     Route::get('/jenis-lapangan', [JenisLapanganController::class, 'index'])->name('jenis-lapangan');
     Route::get('/tambah', [JenisLapanganController::class, 'create'])->name('tambah-jenis');
     Route::post('/tambah', [JenisLapanganController::class, 'store'])->name('store-jenis');
     Route::delete('/jenis-lapangan/{jenisLapangan}', [JenisLapanganController::class, 'destroy'])->name('hapus-jenis');
-    Route::get('/edit/{lapangan}', [LapanganController::class, 'edit'])->name('edit-lapangan');
-    Route::get('/detail/{lapangan}', [LapanganController::class, 'show'])->name('detail-lapangan');
-    Route::patch('/update/{lapangan}', [LapanganController::class, 'update'])->name('update-lapangan');
-    Route::delete('/delete/{lapangan}', [LapanganController::class, 'destroy'])->name('delete-lapangan');
 
     Route::get('/daftar-booking', [AdminBookingController::class, 'index'])->name('admin.daftar-booking');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'update'])->name('admin.booking.update');
