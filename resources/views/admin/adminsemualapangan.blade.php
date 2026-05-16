@@ -58,7 +58,7 @@
                         </td>
 
                         <td class="px-4 py-3">
-                            <img src="{{ $item->gambar_lapangan) }}"
+                            <img src="{{ $item->gambar_lapangan }}"
                                  class="w-20 h-16 object-cover rounded">
                         </td>
 

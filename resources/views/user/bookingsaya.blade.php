@@ -66,7 +66,7 @@
 
             <div class="flex items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4">
                 @if($booking->lapangan->gambar_lapangan)
-                    <img src="{{ $booking->lapangan->gambar_lapangan) }}"
+                    <img src="{{ $booking->lapangan->gambar_lapangan }}"
                          class="w-16 h-14 sm:w-20 sm:h-16 object-cover rounded-lg shrink-0">
                 @endif
 
