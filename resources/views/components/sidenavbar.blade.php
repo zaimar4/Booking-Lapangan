@@ -24,7 +24,7 @@
   <div class="h-full px-3 py-4 overflow-y-auto border-r border-zinc-200 bg-white flex flex-col">
 
     <div class="mb-6 px-2 font-bold text-xl tracking-tight text-zinc-900">
-      BOOKING<span class="text-zinc-500">LAPANGAN</span>
+      Sport<span class="text-green-500">Field</span>
     </div>
 
     @if (Auth::user()->role == 'admin')
