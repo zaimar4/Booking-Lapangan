@@ -7,6 +7,8 @@ use App\Models\Lapangan;
 use App\Models\JenisLapangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class LapanganController extends Controller
 {
@@ -20,21 +22,13 @@ class LapanganController extends Controller
         $totalLapangan = $query->count();
         $lapangan = $query->latest()->paginate(5);
         
+        $view = Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
+        $bookingpending = Booking::where('status', 'pending')->count();
+        $bookingapproved = Booking::where('status', 'approved')->count();
+        $totalbooking = Booking::count();
+        $bookings = Booking::with(['lapangan.jenisLapangan'])->latest()->paginate(10);
 
-$view = Auth::user()->role == 'admin'
-    ? 'admin.admindashboard'
-    : 'user.userdashboard';
-
-
-        $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdashboard';
-       $bookingpending=Booking::where('status','pending')->count();
-         $bookingapproved=Booking::where('status','approved')->count();
-         $totalbooking=Booking::count();
-         $bookings=Booking::with(['lapangan.jenisLapangan'])->latest()->paginate(10);
-            
-
-
-        return view($view, compact('lapangan', 'totalLapangan','bookingpending','bookingapproved','totalbooking','bookings'));
+        return view($view, compact('lapangan', 'totalLapangan', 'bookingpending', 'bookingapproved', 'totalbooking', 'bookings'));
     }
 
     /**
@@ -55,26 +49,23 @@ $view = Auth::user()->role == 'admin'
         $request->validate([
             'nama_lapangan' => 'required',
             'jenis_lapangan' => 'required',
-            'gambar_lapangan' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar_lapangan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'harga_sewa' => 'required|numeric|min:0',
-
-        ]
-        ,
-        [
+        ], [
             'harga_sewa.min' => 'Harga Tidak Boleh Minus'
-        ]
-        );
+        ]);
 
-       
-        $gambar = $request->file('gambar_lapangan');
-        $nama_gambar = time() . '.' . $gambar->extension();
-        $gambar->move(public_path('images'), $nama_gambar);
-
-      
+        $imageUrl = null;
+        
+        if ($request->hasFile('gambar_lapangan')) {
+            $file = $request->file('gambar_lapangan');
+            $imageUrl = $this->uploadToSupabase($file);
+        }
+        
         Lapangan::create([
             'nama_lapangan' => $request->nama_lapangan,
             'jenis_lapangan' => $request->jenis_lapangan,
-            'gambar_lapangan' => $nama_gambar,
+            'gambar_lapangan' => $imageUrl,
             'deskripsi_lapangan' => $request->deskripsi_lapangan,
             'harga_sewa' => $request->harga_sewa,
         ]);
@@ -83,17 +74,14 @@ $view = Auth::user()->role == 'admin'
             ->with('success', 'Lapangan berhasil ditambahkan.');
     }
 
-  
     public function getAll(Request $request)
     {
         $query = \App\Models\Lapangan::with('jenisLapangan')->latest();
  
-        // Search
         if ($request->filled('search')) {
             $query->where('nama_lapangan', 'like', '%' . $request->search . '%');
         }
  
-        // Filter jenis
         if ($request->filled('jenis')) {
             $query->where('jenis_lapangan', $request->jenis);
         }
@@ -132,25 +120,24 @@ $view = Auth::user()->role == 'admin'
             'gambar_lapangan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        if ($request->hasFile('gambar_lapangan')) {
-
-            if ($lapangan->gambar_lapangan && file_exists(public_path('images/' . $lapangan->gambar_lapangan))) {
-                unlink(public_path('images/' . $lapangan->gambar_lapangan));
-            }
-
-            $gambar = $request->file('gambar_lapangan');
-            $nama_gambar = time() . '.' . $gambar->extension();
-            $gambar->move(public_path('images'), $nama_gambar);
-
-            $lapangan->gambar_lapangan = $nama_gambar;
-        }
-
-       $lapangan->update($request->only([
+        $dataUpdate = $request->only([
             'nama_lapangan',
-            'jenis_lapangan_id',
+            'jenis_lapangan',
             'deskripsi_lapangan',
             'harga_sewa'
-        ]));
+        ]);
+
+        if ($request->hasFile('gambar_lapangan')) {
+            if ($lapangan->gambar_lapangan) {
+                $this->deleteFromSupabase($lapangan->gambar_lapangan);
+            }
+
+            $file = $request->file('gambar_lapangan');
+            $dataUpdate['gambar_lapangan'] = $this->uploadToSupabase($file);
+        }
+
+        $lapangan->update($dataUpdate);
+
         return redirect()->route('admin.semua-lapangan')
             ->with('success', 'Lapangan berhasil diupdate.');
     }
@@ -160,8 +147,8 @@ $view = Auth::user()->role == 'admin'
      */
     public function destroy(Lapangan $lapangan)
     {
-        if ($lapangan->gambar_lapangan && file_exists(public_path('images/' . $lapangan->gambar_lapangan))) {
-            unlink(public_path('images/' . $lapangan->gambar_lapangan));
+        if ($lapangan->gambar_lapangan) {
+            $this->deleteFromSupabase($lapangan->gambar_lapangan);
         }
 
         $lapangan->delete();
@@ -172,8 +159,52 @@ $view = Auth::user()->role == 'admin'
 
     public function show(lapangan $lapangan)
     {
-         $view=Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdetaillapangan';
+        $view = Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdetaillapangan';
         $lapangan->load('jenisLapangan');
         return view($view, compact('lapangan'));
+    }
+
+    private function uploadToSupabase($file)
+    {
+        $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $fileContent = file_get_contents($file->getRealPath());
+
+        $supabaseUrl = env('SUPABASE_URL');
+        $supabaseKey = env('SUPABASE_API_KEY');
+        $bucket = env('SUPABASE_BUCKET');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $supabaseKey,
+            'apiKey' => $supabaseKey,
+        ])->attach(
+            'file',
+            $fileContent,
+            $fileName
+        )->post(
+            $supabaseUrl . '/storage/v1/object/' . $bucket . '/' . $fileName
+        );
+
+        if ($response->successful()) {
+            return "{$supabaseUrl}/storage/v1/object/public/{$bucket}/{$fileName}";
+        }
+
+        throw new \Exception('Upload ke Supabase gagal: ' . $response->body());
+    }
+
+    private function deleteFromSupabase($url)
+    {
+        $supabaseUrl = env('SUPABASE_URL');
+        $supabaseKey = env('SUPABASE_API_KEY');
+        $bucket = env('SUPABASE_BUCKET');
+
+        $baseUrl = "{$supabaseUrl}/storage/v1/object/public/{$bucket}/";
+        $fileName = str_replace($baseUrl, '', $url);
+
+        if ($fileName && $fileName !== $url) {
+            Http::withHeaders([
+                'Authorization' => 'Bearer ' . $supabaseKey,
+                'apiKey' => $supabaseKey,
+            ])->delete($supabaseUrl . '/storage/v1/object/' . $bucket . '/' . $fileName);
+        }
     }
 }
