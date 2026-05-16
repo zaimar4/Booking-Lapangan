@@ -163,7 +163,7 @@ class LapanganController extends Controller
 
     public function show(lapangan $lapangan)
     {
-        $view = Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdetaillapangan';
+        $view = Auth::user()->role == 'admin' ? 'admin.detaillapangan' : 'user.userdetaillapangan';
         $lapangan->load('jenisLapangan');
         return view($view, compact('lapangan'));
     }
