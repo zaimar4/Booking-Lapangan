@@ -86,7 +86,7 @@ $view = Auth::user()->role == 'admin'
   
     public function getAll(Request $request)
     {
-        $query = Lapangan::with('jenisLapangan')->latest();
+        $query = \App\Models\Lapangan::with('jenisLapangan')->latest();
  
         // Search
         if ($request->filled('search')) {
