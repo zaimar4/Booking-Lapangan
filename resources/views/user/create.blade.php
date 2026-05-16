@@ -4,9 +4,9 @@
 
 @section('content')
 
-<div class="p-6 ml-60">
+<div class="p-4 sm:p-6">
 
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Booking Lapangan</h1>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-5 sm:mb-6">Booking Lapangan</h1>
 
     @if(session('error'))
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-5">
@@ -30,7 +30,7 @@
         </div>
     @endif
 
-    <div class="bg-white rounded-2xl shadow-md p-6">
+    <div class="bg-white rounded-2xl shadow-md p-4 sm:p-6">
 
         <form action="{{ route('booking.store') }}" method="POST">
 
@@ -38,8 +38,8 @@
 
             <input type="hidden" name="lapangan_id" value="{{ $lapangan->id }}">
 
-            <div class="mb-6">
-                <label class="block mb-2 font-semibold text-gray-700">Tanggal Booking</label>
+            <div class="mb-5 sm:mb-6">
+                <label class="block mb-2 font-semibold text-gray-700 text-sm sm:text-base">Tanggal Booking</label>
                 <input
                     type="date"
                     id="tanggal"
@@ -47,35 +47,35 @@
                     value="{{ old('tanggal', date('Y-m-d')) }}"
                     min="{{ date('Y-m-d') }}"
                     required
-                    class="w-full border rounded-xl p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none">
+                    class="w-full border rounded-xl p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none text-sm sm:text-base">
             </div>
 
-            <div class="mb-6">
-                <label class="block mb-4 font-semibold text-gray-700">Pilih Jam Booking</label>
+            <div class="mb-5 sm:mb-6">
+                <label class="block mb-3 sm:mb-4 font-semibold text-gray-700 text-sm sm:text-base">Pilih Jam Booking</label>
 
-                <div id="slotContainer" class="grid grid-cols-3 md:grid-cols-5 gap-3">
+                <div id="slotContainer" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 sm:gap-3">
                     @for($i = 8; $i < 22; $i++)
                         @php $jam = str_pad($i, 2, '0', STR_PAD_LEFT) . ':00'; @endphp
                         <button
                             type="button"
                             data-jam="{{ $jam }}"
-                            class="slot-btn border rounded-xl py-3 font-semibold transition hover:bg-blue-100">
+                            class="slot-btn border rounded-xl py-2.5 sm:py-3 text-sm font-semibold transition hover:bg-blue-100">
                             {{ $jam }}
                         </button>
                     @endfor
                 </div>
 
-                <div class="flex gap-5 mt-5 text-sm flex-wrap">
+                <div class="flex flex-wrap gap-3 sm:gap-5 mt-4 sm:mt-5 text-xs sm:text-sm">
                     <div class="flex items-center gap-2">
-                        <div class="w-5 h-5 bg-blue-500 rounded"></div>
+                        <div class="w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 rounded"></div>
                         <span>Dipilih</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <div class="w-5 h-5 bg-red-500 rounded"></div>
+                        <div class="w-4 h-4 sm:w-5 sm:h-5 bg-red-500 rounded"></div>
                         <span>Sudah Dibooking</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <div class="w-5 h-5 border rounded"></div>
+                        <div class="w-4 h-4 sm:w-5 sm:h-5 border rounded"></div>
                         <span>Tersedia</span>
                     </div>
                 </div>
@@ -83,20 +83,20 @@
 
             <div id="hiddenSlots"></div>
 
-            <div class="bg-gray-100 rounded-2xl p-5 mb-6">
+            <div class="bg-gray-100 rounded-2xl p-4 sm:p-5 mb-5 sm:mb-6">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <p class="text-gray-500 text-sm">Durasi</p>
-                        <h2 id="durasi" class="text-2xl font-bold">0 Jam</h2>
+                        <p class="text-gray-500 text-xs sm:text-sm">Durasi</p>
+                        <h2 id="durasi" class="text-xl sm:text-2xl font-bold">0 Jam</h2>
                     </div>
                     <div>
-                        <p class="text-gray-500 text-sm">Total Harga</p>
-                        <h2 id="harga" class="text-2xl font-bold text-green-600">Rp 0</h2>
+                        <p class="text-gray-500 text-xs sm:text-sm">Total Harga</p>
+                        <h2 id="harga" class="text-xl sm:text-2xl font-bold text-green-600">Rp 0</h2>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-xl font-semibold">
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base transition-colors">
                 Booking Sekarang
             </button>
 
@@ -115,9 +115,9 @@
 
     let selectedSlots = [];
 
-    const CLASS_DEFAULT  = 'slot-btn border rounded-xl py-3 font-semibold transition hover:bg-blue-100';
-    const CLASS_SELECTED = 'slot-btn border border-blue-500 rounded-xl py-3 font-semibold bg-blue-500 text-white';
-    const CLASS_BOOKED   = 'slot-btn border border-red-500 rounded-xl py-3 font-semibold bg-red-500 text-white cursor-not-allowed';
+    const CLASS_DEFAULT  = 'slot-btn border rounded-xl py-2.5 sm:py-3 text-sm font-semibold transition hover:bg-blue-100';
+    const CLASS_SELECTED = 'slot-btn border border-blue-500 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-blue-500 text-white';
+    const CLASS_BOOKED   = 'slot-btn border border-red-500 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-red-500 text-white cursor-not-allowed';
 
     async function loadBookedSlots() {
         const tanggal = tanggalInput.value;

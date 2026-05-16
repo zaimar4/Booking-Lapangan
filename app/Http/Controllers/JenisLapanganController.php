@@ -12,8 +12,8 @@ class JenisLapanganController extends Controller
      */
     public function index()
     {
-        $JenisLapangan=JenisLapangan::all();
-        return view('admin.jenislapangan',compact('JenisLapangan'));
+        $jenisLapangan = JenisLapangan::all();
+        return view('admin.jenislapangan', compact('jenisLapangan'));
     }
 
     /**
@@ -69,6 +69,7 @@ class JenisLapanganController extends Controller
      */
     public function destroy(JenisLapangan $jenisLapangan)
     {
-        //
+        $jenisLapangan->delete();
+        return redirect()->route('jenis-lapangan')->with('success', 'Jenis lapangan berhasil dihapus.');
     }
 }
