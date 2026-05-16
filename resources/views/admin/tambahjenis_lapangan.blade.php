@@ -3,7 +3,7 @@
 @section('title','Tambah Jenis Lapangan')
 
 @section('content')
-<div class="p-6 max-w-xl mx-auto">
+<div class="p-4 sm:p-6 max-w-xl mx-auto">
 
     <h1 class="text-2xl font-bold mb-6 text-gray-800">
         BUAT JENIS LAPANGAN ATAU KATEGORI LAPANGAN

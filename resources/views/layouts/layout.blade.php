@@ -13,7 +13,9 @@
 
     <x-sidenavbar />
 
-    @yield('content')
+    <main class="sm:ml-64 min-h-screen transition-all duration-300">
+        @yield('content')
+    </main>
 
     @stack('scripts')
 

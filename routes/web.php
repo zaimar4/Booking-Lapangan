@@ -38,6 +38,7 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
     Route::get('/jenis-lapangan', [JenisLapanganController::class, 'index'])->name('jenis-lapangan');
     Route::get('/tambah', [JenisLapanganController::class, 'create'])->name('tambah-jenis');
     Route::post('/tambah', [JenisLapanganController::class, 'store'])->name('tambah-jenis');
+    Route::delete('/jenis-lapangan/{jenisLapangan}', [JenisLapanganController::class, 'destroy'])->name('hapus-jenis');
     Route::get('/edit/{lapangan}', [LapanganController::class, 'edit'])->name('edit-lapangan');
     Route::get('/detail/{lapangan}', [LapanganController::class, 'show'])->name('detail-lapangan');
     Route::patch('/update/{lapangan}', [LapanganController::class, 'update'])->name('update-lapangan');

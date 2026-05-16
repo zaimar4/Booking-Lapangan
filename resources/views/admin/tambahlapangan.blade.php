@@ -4,17 +4,14 @@
 
 @section('content')
 
-<div class="flex">
-    <x-sidenavbar />
-
-    <div class="flex-1 ml-64 p-8">
+<div class="p-4 sm:p-8">
 
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-zinc-900">Tambah Lapangan</h1>
             <p class="text-zinc-500 text-sm mt-1">Isi data lapangan baru yang ingin ditambahkan</p>
         </div>
 
-        <div class="bg-white rounded-2xl border border-zinc-100 shadow-sm p-8">
+        <div class="bg-white rounded-2xl border border-zinc-100 shadow-sm p-4 sm:p-8">
 
             <form action="{{ route('admin.store-lapangan') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                 @csrf
@@ -85,6 +82,5 @@
         </div>
 
     </div>
-</div>
 
 @endsection

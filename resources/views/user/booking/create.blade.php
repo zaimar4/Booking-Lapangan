@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="ml-64 p-8">
+<div class="p-4 sm:p-8">
 
     <h1 class="text-2xl font-bold mb-6">
         Booking Lapangan
