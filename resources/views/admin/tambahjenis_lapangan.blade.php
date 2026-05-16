@@ -11,7 +11,7 @@
 
     <div class="bg-white shadow-md rounded-lg p-6">
 
-        <form action="{{ route('tambah-jenis') }}" method="POST" class="space-y-4">
+        <form action="{{ route('store-jenis') }}" method="POST" class="space-y-4">
             @csrf
 
             <div>
