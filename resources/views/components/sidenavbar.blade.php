@@ -77,7 +77,7 @@
             </svg>
             <span class="flex-1 ms-3 whitespace-nowrap">Daftar Kategori
               <span class="inline-flex items-center justify-center w-5 h-5 ms-10 text-xs font-bold text-white bg-zinc-900 rounded-full mr-5">
-                {{ \App\Models\Jenislapangan::count() }}
+                {{ \App\Models\JenisLapangan::count() }}
               </span>
             </span>
           </a>
