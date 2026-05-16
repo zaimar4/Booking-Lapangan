@@ -22,6 +22,8 @@ return new class extends Migration {
                     $table->text('deskripsi_lapangan')->nullable();
                     $table->integer('harga_sewa');
                     $table->enum('status', ['Tersedia', 'Penuh'])->default('Tersedia');
+                    $table->time('jam_buka');
+                    $table->time('jam_tutup');
                 });
             
         }

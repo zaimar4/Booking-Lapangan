@@ -26,13 +26,8 @@ class DatabaseSeeder extends Seeder
         //     'role' => 'admin',
         //     'password' => bcrypt('123456789'),
         // ]);
-        User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@example.com',
-            'role' => 'admin',
-            'password' => bcrypt('12345678'),
-        ]);
-        // JenisLapangan::factory(4)->create();
+        // User::factory(100)->create();
+        JenisLapangan::factory(4)->create();
         // Lapangan::factory(4)->create();
         // Booking::factory(20)->create();
         
