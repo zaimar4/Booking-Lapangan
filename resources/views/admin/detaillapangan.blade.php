@@ -16,7 +16,7 @@
                 </div>
                 <div class="card-body text-center">
                     @if($lapangan->gambar_lapangan)
-                        <img src="{{ $lapangan->gambar_lapangan }}" class="img-fluid rounded shadow-sm" alt="Foto Lapangan" width="60">
+                        <img src="{{ asset('images/' . $lapangan->gambar_lapangan) }}" class="img-fluid rounded shadow-sm" alt="Foto Lapangan" width="60">
                     @else
                         <div class="bg-light py-5 text-muted">Tidak ada foto</div>
                     @endif

@@ -15,7 +15,7 @@
         <div class="border rounded-lg p-4 shadow bg-white">
 
             <img
-                src="{{  $item->gambar_lapangan }}"
+                src="{{ asset('images/' . $item->gambar_lapangan) }}"
                 class="w-full h-40 object-cover rounded">
 
             <h2 class="text-lg sm:text-xl font-bold mt-2">

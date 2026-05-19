@@ -36,7 +36,7 @@
 
     <div>
         <label>Gambar Saat Ini</label><br>
-        <img src="{{ $lapangan->gambar_lapangan }}" width="120">
+        <img src="{{ asset('images/' . $lapangan->gambar_lapangan) }}" width="120">
     </div>
 
     <br>
