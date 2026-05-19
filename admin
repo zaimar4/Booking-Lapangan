@@ -1,0 +1,95 @@
+[33m6ecc063[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: commit: fix npm
+[33m0d99a0d[m HEAD@{1}: commit: fix npm
+[33mb22c424[m HEAD@{2}: commit: fix npm
+[33mffd9c9f[m HEAD@{3}: commit: test
+[33m119d554[m HEAD@{4}: commit: test
+[33m3a5b7c4[m HEAD@{5}: commit: test
+[33m9bebca2[m HEAD@{6}: commit: update detail lapangan admin
+[33md0ae397[m HEAD@{7}: rebase (finish): returning to refs/heads/main
+[33md0ae397[m HEAD@{8}: rebase (pick): t
+[33m6d2557b[m HEAD@{9}: commit: ya
+[33mdd563e7[m HEAD@{10}: pull origin main (start): checkout dd563e7f84632a2d51e853f68bcdd09bac1423f4
+[33meb48562[m HEAD@{11}: commit: t
+[33m26b851a[m HEAD@{12}: commit: update view detailapanagn
+[33m22824b1[m HEAD@{13}: commit: call supabase img
+[33md2bb15a[m HEAD@{14}: commit: call supabase img
+[33m207ba07[m HEAD@{15}: commit: call supabase img
+[33mb89d63f[m HEAD@{16}: commit: call supabase img
+[33md9ae1d7[m HEAD@{17}: commit: call supabase img
+[33m01e81eb[m HEAD@{18}: commit: call supabase img
+[33m1f3a440[m HEAD@{19}: commit: call supabase img
+[33mdb53d10[m HEAD@{20}: commit: fix npm
+[33m9fe3a5d[m HEAD@{21}: commit: Fix casing folder admin menjadi Admin
+[33m5f93ce4[m HEAD@{22}: commit: update tables adnn seed
+[33mb5e1130[m HEAD@{23}: commit: lapangan
+[33me52b018[m HEAD@{24}: commit: lapangan
+[33m9d396be[m HEAD@{25}: commit: bucketsupabase
+[33m5b904b6[m HEAD@{26}: commit: lapangan
+[33m14b4c54[m HEAD@{27}: commit: lapangan
+[33m9d1523e[m HEAD@{28}: commit: Fix case sensitivity by rebuilding git tracking
+[33m82cef08[m HEAD@{29}: commit: update lapangan
+[33m8deecfe[m HEAD@{30}: commit: update lapangan
+[33mb8de6fc[m HEAD@{31}: commit: update lapangan
+[33m18d5da3[m HEAD@{32}: commit: update lapangan
+[33m9da2524[m HEAD@{33}: commit: production
+[33m8023a45[m HEAD@{34}: commit: production
+[33m5333813[m HEAD@{35}: commit: production
+[33m44b342d[m HEAD@{36}: commit: production
+[33me13657a[m HEAD@{37}: commit (merge): production
+[33me9c57d7[m HEAD@{38}: rebase (abort): returning to refs/heads/main
+[33m014f839[m HEAD@{39}: commit: production
+[33me4418b0[m HEAD@{40}: commit: update jamslot
+[33m70d63e2[m HEAD@{41}: commit: a
+[33m8514ea1[m HEAD@{42}: pull origin main (start): checkout 8514ea1d8d7cfc29b2db7c87b9fa91d76532cdc3
+[33me9c57d7[m HEAD@{43}: commit: .
+[33m078200a[m HEAD@{44}: commit: responsize sidenavdone
+[33m378a933[m HEAD@{45}: commit: loginregister
+[33mdc88802[m HEAD@{46}: commit (merge): /
+[33mb267506[m HEAD@{47}: commit: fix bebrap bug
+[33m277f79f[m HEAD@{48}: pull origin main: Fast-forward
+[33m85fee71[m HEAD@{49}: commit: update sidenav
+[33mbfcd99c[m HEAD@{50}: pull origin main: Fast-forward
+[33med1e095[m HEAD@{51}: commit: update
+[33mfdcef14[m HEAD@{52}: commit: update
+[33me84e4e1[m HEAD@{53}: commit (merge): update
+[33mae5dc41[m HEAD@{54}: commit: update booking
+[33m955e445[m HEAD@{55}: commit: uodate
+[33mcfd322e[m HEAD@{56}: commit (merge): Create Booking
+[33ma37fb8b[m HEAD@{57}: commit: booking
+[33mb2fad64[m HEAD@{58}: commit: update ui
+[33m3aa356f[m HEAD@{59}: commit: UPDATE UI
+[33m2f5d0fa[m HEAD@{60}: commit: fix layotu
+[33m7654db1[m HEAD@{61}: commit: PUSH
+[33m2c3ff1c[m HEAD@{62}: pull origin main: Fast-forward
+[33mb69c8e8[m HEAD@{63}: commit: updateui
+[33m5fc5216[m HEAD@{64}: commit: add
+[33me59128e[m HEAD@{65}: pull origin main --rebase (finish): returning to refs/heads/main
+[33me59128e[m HEAD@{66}: pull origin main --rebase (pick): UPDATE
+[33mae8818d[m HEAD@{67}: pull origin main --rebase (start): checkout ae8818d3e8a923674d002dec3d402fe4d34b86c7
+[33m9a13b92[m HEAD@{68}: commit: UPDATE
+[33mfd81815[m HEAD@{69}: commit: UPDATE USER UI
+[33me61863a[m HEAD@{70}: commit: update view user
+[33m6a1f15d[m HEAD@{71}: commit: UPDATE DATABSE
+[33mf699d6e[m HEAD@{72}: commit (merge): UPDATE TABLES
+[33mb1c03b5[m HEAD@{73}: commit: UPDATE TABLES
+[33mb8c51a3[m HEAD@{74}: pull origin main: Fast-forward
+[33m5791157[m HEAD@{75}: commit: ya
+[33m5348fb3[m HEAD@{76}: commit: uupdate
+[33m5003ef9[m HEAD@{77}: commit: update ui
+[33mc11bd09[m HEAD@{78}: pull origin main: Fast-forward
+[33m2668d07[m HEAD@{79}: commit: hapus folder images
+[33m4ffb634[m HEAD@{80}: commit: 'add'
+[33m10346ae[m HEAD@{81}: commit: add folder Images
+[33m406b5b4[m HEAD@{82}: commit: DELETE IMAGES FROM GITHUB
+[33m37b73cf[m HEAD@{83}: commit: FIX FITUR TAMBAH LAPANGAN<TAMPILKAN SEMUA LAPANGAN ADMIN,TOLONG FIX KAN UPDATE EDTI NYA
+[33m8bee3f5[m HEAD@{84}: commit: FIX BUG
+[33m252948f[m HEAD@{85}: commit: FITUR BUAT KATEGORI,LOGIN REGISTER,TAMBAHLAPANGAN E NGEBUG'
+[33m5cad075[m HEAD@{86}: commit (merge): login/register
+[33m7a15801[m HEAD@{87}: commit: Login/Register
+[33m175ac60[m HEAD@{88}: pull origin main: Fast-forward
+[33md9c7458[m HEAD@{89}: commit: Menambah file try blade baru
+[33ma8bfb03[m HEAD@{90}: commit (merge): Fix merge conflict in README.md
+[33m32666d6[m HEAD@{91}: rebase (abort): returning to refs/heads/main
+[33m86e8cf6[m HEAD@{92}: pull origin main --rebase (start): checkout 86e8cf641d954a2f6df2ed57ff8f389fd0a298c5
+[33m32666d6[m HEAD@{93}: Branch: renamed refs/heads/master to refs/heads/main
+[33m32666d6[m HEAD@{95}: commit (initial): push Booking_Lapangan'

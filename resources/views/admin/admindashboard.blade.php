@@ -15,23 +15,23 @@
 
         <div class="bg-white rounded-2xl shadow-md p-4 sm:p-5 border">
             <p class="text-gray-500 text-xs sm:text-sm">Total Lapangan</p>
-            <h2 class="text-2xl sm:text-4xl font-bold text-green-600 mt-2 sm:mt-3">{{ $totalLapangan }}</h2>
+            <h2 class="text-2xl sm:text-4xl font-bold text-green-600 mt-2 sm:mt-3">{{ $totalLapangan ?? 0}}</h2>
         </div>
 
         <div class="bg-white rounded-2xl shadow-md p-4 sm:p-5 border">
             <p class="text-gray-500 text-xs sm:text-sm">Total Booking</p>
-            <h2 class="text-2xl sm:text-4xl font-bold text-blue-600 mt-2 sm:mt-3">{{ $totalBookingSemua }}</h2>
+            <h2 class="text-2xl sm:text-4xl font-bold text-blue-600 mt-2 sm:mt-3">{{ $totalBookingSemua ?? 0}}</h2>
         </div>
 
         <div class="bg-white rounded-2xl shadow-md p-4 sm:p-5 border">
             <p class="text-gray-500 text-xs sm:text-sm">Booking Pending</p>
-            <h2 class="text-2xl sm:text-4xl font-bold text-yellow-500 mt-2 sm:mt-3">{{ $bookingPending }}</h2>
+            <h2 class="text-2xl sm:text-4xl font-bold text-yellow-500 mt-2 sm:mt-3">{{ $bookingPending ?? 0}}</h2>
         </div>
 
         <div class="bg-white rounded-2xl shadow-md p-4 sm:p-5 border">
             <p class="text-gray-500 text-xs sm:text-sm">Total Pendapatan</p>
             <h2 class="text-xl sm:text-3xl font-bold text-purple-600 mt-2 sm:mt-3">
-                Rp {{ number_format($totalPendapatanSemua, 0, ',', '.') }}
+                Rp {{ number_format($totalPendapatanSemua, 0, ',', '.') ?? 0}}
             </h2>
         </div>
 
