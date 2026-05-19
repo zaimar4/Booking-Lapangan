@@ -50,10 +50,10 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
     Route::get('/daftar-booking', [AdminBookingController::class, 'index'])->name('admin.daftar-booking');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'update'])->name('admin.booking.update');
 
-    Route::get('/admin/laporan/pendapatan/pdf', [LaporanController::class, 'exportPendapatan'])
+    Route::get('/admin/laporan/pendapatan/pdf', [LaporanController::class, 'index'])
     ->name('laporan.pendapatan.pdf');
 
-    Route::get('/admin/laporan/booking/pdf', [LaporanController::class, 'exportBooking'])
+    Route::get('/admin/laporan/booking/pdf', [LaporanController::class, 'exportPdf'])
     ->name('laporan.booking.pdf');
   
 
