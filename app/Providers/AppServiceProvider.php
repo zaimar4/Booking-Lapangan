@@ -25,29 +25,14 @@ class AppServiceProvider extends ServiceProvider
     
 public function boot(): void
 {
+    // Kode Force HTTPS bawaan Anda
     if (config('app.env') === 'production') {
         URL::forceScheme('https');
     }
 
-// Menggunakan 'admin.*' agar otomatis dibagikan ke 'admin.admindashboard' DAN 'admin.detail'
-View::composer(['admin.admindashboard', 'admin.*'], function ($view) {
-    
-    $statistik = Cache::remember('admin_stats_v2', 600, function () {
-        return [
-            'totalLapangan'        => \App\Models\Lapangan::count(),
-            'totalBookingSemua'    => \App\Models\Booking::count(),
-            'bookingPending'       => \App\Models\Booking::where('status', 'pending')->count(),
-            
-            'totalPendapatanSemua' => \App\Models\Booking::join('lapangans', 'lapangans.id', '=', 'bookings.lapangan_id')
-                ->whereIn('bookings.status', ['confirmed', 'completed'])
-                ->selectRaw('SUM(lapangans.harga_sewa * TIMESTAMPDIFF(HOUR, bookings.jam_mulai, bookings.jam_selesai)) as total')
-                ->value('total') ?? 0,
-        ];
-    });
-
-    $view->with($statistik);
-});
-}
+    // Menggunakan View Composer + Caching agar performa kencang
+   
+        
 }
 
 
