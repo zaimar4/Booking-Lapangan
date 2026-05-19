@@ -146,9 +146,9 @@
     const durasiText   = document.getElementById('durasi');
     const hargaText    = document.getElementById('harga');
 
-    // Jam sekarang (server-side agar konsisten dengan timezone aplikasi)
-    const nowHour      = {{ (int) now()->format('H') }};
-    const todayStr     = '{{ now()->toDateString() }}';
+    const nowHour  = {{ (int) now()->format('H') }};
+    const nowMin   = {{ (int) now()->format('i') }};   // ← tambah menit
+    const todayStr = '{{ now()->toDateString() }}';
 
     let selectedSlots = [];
 
@@ -157,26 +157,32 @@
     const CLASS_BOOKED   = 'slot-btn border border-red-500 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-red-500 text-white cursor-not-allowed';
     const CLASS_PAST     = 'slot-btn border border-zinc-300 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-zinc-200 text-zinc-400 cursor-not-allowed';
 
+    function isPastSlot(jamStr) {
+        // jamStr format "08:00"
+        const [h, m] = jamStr.split(':').map(Number);
+        return h < nowHour || (h === nowHour && m <= nowMin);
+    }
+
     function markPastSlots() {
         const isToday = tanggalInput.value === todayStr;
-        const buttons = document.querySelectorAll('.slot-btn');
 
-        buttons.forEach(btn => {
-            // Jangan sentuh slot yang sudah dibooking (merah)
+        document.querySelectorAll('.slot-btn').forEach(btn => {
+            // Jangan sentuh slot yang sudah dibooking
             if (btn.dataset.status === 'booked') return;
 
-            const slotHour = parseInt(btn.dataset.jam);
-
-            if (isToday && slotHour <= nowHour) {
-                btn.disabled    = true;
-                btn.className   = CLASS_PAST;
-                btn.title       = 'Jam ini sudah lewat';
-                // Kalau slot ini terlanjur dipilih, hapus dari selectedSlots
-                selectedSlots   = selectedSlots.filter(s => s !== btn.dataset.jam);
-            } else if (!btn.dataset.status) {
-                btn.disabled    = false;
-                btn.className   = CLASS_DEFAULT;
-                btn.title       = '';
+            if (isToday && isPastSlot(btn.dataset.jam)) {
+                btn.disabled       = true;
+                btn.className      = CLASS_PAST;
+                btn.dataset.status = 'past';          // ← tandai sebagai past
+                btn.title          = 'Jam ini sudah lewat';
+                // Hapus dari pilihan kalau sempat terpilih
+                selectedSlots = selectedSlots.filter(s => s !== btn.dataset.jam);
+            } else if (btn.dataset.status === 'past') {
+                // Kalau tanggal diganti ke masa depan, reset past → available
+                btn.disabled       = false;
+                btn.className      = CLASS_DEFAULT;
+                delete btn.dataset.status;
+                btn.title          = '';
             }
         });
 
@@ -190,10 +196,9 @@
         try {
             const response    = await fetch(`/user/booking/slots/{{ $lapangan->id }}/${tanggal}`);
             const bookedSlots = await response.json();
-            const buttons     = document.querySelectorAll('.slot-btn');
 
-            // Reset semua slot dulu
-            buttons.forEach(btn => {
+            // Reset semua slot
+            document.querySelectorAll('.slot-btn').forEach(btn => {
                 delete btn.dataset.status;
                 btn.disabled  = false;
                 btn.className = CLASS_DEFAULT;
@@ -202,17 +207,17 @@
 
             selectedSlots = [];
 
-            // Tandai slot yang sudah dibooking
-            buttons.forEach(btn => {
+            // Tandai booked
+            document.querySelectorAll('.slot-btn').forEach(btn => {
                 if (bookedSlots.includes(btn.dataset.jam)) {
-                    btn.disabled        = true;
-                    btn.className       = CLASS_BOOKED;
-                    btn.dataset.status  = 'booked';
-                    btn.title           = 'Sudah dibooking';
+                    btn.disabled       = true;
+                    btn.className      = CLASS_BOOKED;
+                    btn.dataset.status = 'booked';
+                    btn.title          = 'Sudah dibooking';
                 }
             });
 
-            // Tandai slot yang sudah lewat (harus setelah booked agar tidak override)
+            // Tandai past (setelah booked agar tidak override)
             markPastSlots();
 
         } catch (error) {
@@ -229,8 +234,8 @@
         const jam = button.dataset.jam;
 
         if (selectedSlots.includes(jam)) {
-            selectedSlots     = selectedSlots.filter(s => s !== jam);
-            button.className  = CLASS_DEFAULT;
+            selectedSlots    = selectedSlots.filter(s => s !== jam);
+            button.className = CLASS_DEFAULT;
         } else {
             const temp = [...selectedSlots, jam].sort();
 
@@ -248,16 +253,21 @@
 
     function isSequential(slots) {
         for (let i = 0; i < slots.length - 1; i++) {
-            if (parseInt(slots[i + 1]) !== parseInt(slots[i]) + 1) return false;
+            const [h1] = slots[i].split(':').map(Number);
+            const [h2] = slots[i + 1].split(':').map(Number);
+            if (h2 !== h1 + 1) return false;
         }
         return true;
     }
 
     function updateBooking() {
-        // Sinkronkan warna selected slot (bisa berubah setelah reset)
         document.querySelectorAll('.slot-btn').forEach(btn => {
-            if (btn.dataset.status === 'booked' || btn.disabled) return;
-            btn.className = selectedSlots.includes(btn.dataset.jam) ? CLASS_SELECTED : CLASS_DEFAULT;
+            // ← skip booked DAN past
+            if (btn.dataset.status === 'booked' || btn.dataset.status === 'past') return;
+
+            btn.className = selectedSlots.includes(btn.dataset.jam)
+                ? CLASS_SELECTED
+                : CLASS_DEFAULT;
         });
 
         hiddenSlots.innerHTML = selectedSlots
@@ -269,8 +279,6 @@
     }
 
     tanggalInput.addEventListener('change', loadBookedSlots);
-
-    // Jalankan saat pertama load
     loadBookedSlots();
 </script>
 
