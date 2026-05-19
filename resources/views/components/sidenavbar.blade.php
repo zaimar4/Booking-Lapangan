@@ -94,6 +94,9 @@
           </a>
         </li>
 
+        <p class="px-3 py-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider mt-4">Laporan Pendapatan</p>
+
+
         <li>
           <a href="{{ route('admin.laporan.pendapatan') }}"
             class="flex items-center px-3 py-2 text-zinc-600 rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors group">
