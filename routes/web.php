@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\LapanganController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Lapangan;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,15 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
 
     Route::get('/daftar-booking', [AdminBookingController::class, 'index'])->name('admin.daftar-booking');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'update'])->name('admin.booking.update');
+
+    Route::get('/admin/laporan', [LaporanController::class, 'index'])
+    ->name('laporan.index');
+
+    Route::get('/admin/laporan/pendapatan/pdf', [LaporanController::class, 'exportPendapatan'])
+    ->name('laporan.pendapatan.pdf');
+
+    Route::get('/admin/laporan/booking/pdf', [LaporanController::class, 'exportBooking'])
+    ->name('laporan.booking.pdf');
   
 
 });
