@@ -145,9 +145,12 @@
     const durasiText   = document.getElementById('durasi');
     const hargaText    = document.getElementById('harga');
 
-    // Waktu sekarang dalam total menit
-    const nowTotalMin  = {{ (int) now()->format('H') }} * 60 + {{ (int) now()->format('i') }};
-    const todayStr     = '{{ now()->toDateString() }}';
+    // Pakai waktu browser agar sesuai timezone user
+    const nowDate     = new Date();
+    const nowTotalMin = nowDate.getHours() * 60 + nowDate.getMinutes();
+    const todayStr    = nowDate.getFullYear() + '-' +
+                        String(nowDate.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(nowDate.getDate()).padStart(2, '0');
 
     let selectedSlots = [];
 
@@ -159,7 +162,6 @@
     function isPastSlot(jamStr) {
         const [h] = jamStr.split(':').map(Number);
         const slotTotalMin = h * 60;
-        // Slot dianggap lewat jika waktu mulai slot <= waktu sekarang
         return slotTotalMin <= nowTotalMin;
     }
 
