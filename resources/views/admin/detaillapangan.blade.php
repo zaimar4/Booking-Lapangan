@@ -80,7 +80,7 @@
                 {{-- Photo Frame --}}
                 <div class="bg-green-50 h-48 flex items-center justify-center border-b border-green-100">
                     @if($lapangan->gambar_lapangan)
-                        <img src="{{ asset('images/' . $lapangan->gambar_lapangan) }}"
+                        <img src="{{ $lapangan->gambar_lapangan }}"
                              alt="Foto {{ $lapangan->nama_lapangan }}"
                              class="w-full h-48 object-cover">
                     @else

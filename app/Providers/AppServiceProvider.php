@@ -25,23 +25,14 @@ class AppServiceProvider extends ServiceProvider
     
 public function boot(): void
 {
+    // Kode Force HTTPS bawaan Anda
     if (config('app.env') === 'production') {
         URL::forceScheme('https');
     }
 
-    View::composer('admin.admindashboard', function ($view) {
+    // Menggunakan View Composer + Caching agar performa kencang
+   
         
-        $statistik = Cache::remember('admin_stats', 600, function () {
-            return [
-                'totalLapangan'     => Lapangan::count(),
-                'totalBookingSemua' => Booking::count(),
-                'bookingPending'    => Booking::where('status', 'pending')->count(),
-            ];
-        });
-
-        // Kirim data yang sudah di-cache ke view
-        $view->with($statistik);
-    });
 }
 }
 
