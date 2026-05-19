@@ -2,465 +2,232 @@
 
 @extends('layouts.layout')
 
-@section('styles')
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background: #f0f4f8;
-        min-height: 100vh;
-        color: #1a202c;
-    }
-
-    .page-wrapper {
-        max-width: 780px;
-        margin: 48px auto;
-        padding: 0 24px 64px;
-    }
-
-    /* ── Header ── */
-    .page-header {
-        margin-bottom: 36px;
-    }
-
-    .breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        color: #718096;
-        margin-bottom: 12px;
-    }
-
-    .breadcrumb a {
-        color: #3182ce;
-        text-decoration: none;
-    }
-
-    .breadcrumb a:hover { text-decoration: underline; }
-
-    .breadcrumb-sep { color: #cbd5e0; }
-
-    .page-title {
-        font-size: 28px;
-        font-weight: 700;
-        color: #1a202c;
-        letter-spacing: -0.5px;
-    }
-
-    .page-subtitle {
-        font-size: 14px;
-        color: #718096;
-        margin-top: 6px;
-    }
-
-    /* ── Card ── */
-    .card {
-        background: #ffffff;
-        border-radius: 20px;
-        box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 24px rgba(0,0,0,.07);
-        overflow: hidden;
-    }
-
-    .card-section {
-        padding: 32px 36px;
-        border-bottom: 1px solid #edf2f7;
-    }
-
-    .card-section:last-child { border-bottom: none; }
-
-    .section-label {
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: #a0aec0;
-        margin-bottom: 20px;
-    }
-
-    /* ── Form Controls ── */
-    .form-group {
-        margin-bottom: 22px;
-    }
-
-    .form-group:last-child { margin-bottom: 0; }
-
-    label {
-        display: block;
-        font-size: 14px;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 8px;
-    }
-
-    .required-mark {
-        color: #e53e3e;
-        margin-left: 3px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
-        width: 100%;
-        padding: 11px 14px;
-        font-family: inherit;
-        font-size: 14px;
-        color: #2d3748;
-        background: #f7fafc;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 10px;
-        outline: none;
-        transition: border-color .2s, box-shadow .2s, background .2s;
-        appearance: none;
-    }
-
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    select:focus,
-    textarea:focus {
-        border-color: #3182ce;
-        background: #fff;
-        box-shadow: 0 0 0 3px rgba(49,130,206,.12);
-    }
-
-    select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        padding-right: 40px;
-        cursor: pointer;
-    }
-
-    textarea {
-        resize: vertical;
-        min-height: 110px;
-        line-height: 1.6;
-    }
-
-    /* Harga prefix wrapper */
-    .input-prefix-group {
-        display: flex;
-        align-items: stretch;
-    }
-
-    .input-prefix {
-        display: flex;
-        align-items: center;
-        padding: 0 14px;
-        background: #edf2f7;
-        border: 1.5px solid #e2e8f0;
-        border-right: none;
-        border-radius: 10px 0 0 10px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #718096;
-        white-space: nowrap;
-    }
-
-    .input-prefix-group input {
-        border-radius: 0 10px 10px 0;
-    }
-
-    /* Error */
-    .error-msg {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 6px;
-        font-size: 12.5px;
-        color: #c53030;
-        font-weight: 500;
-    }
-
-    .error-msg::before {
-        content: "⚠";
-        font-size: 11px;
-    }
-
-    /* ── Image Preview ── */
-    .image-section {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        align-items: start;
-    }
-
-    .image-preview-box {
-        aspect-ratio: 4/3;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1.5px solid #e2e8f0;
-        background: #f7fafc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .image-preview-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    .image-upload-area {
-        border: 2px dashed #cbd5e0;
-        border-radius: 12px;
-        padding: 28px 20px;
-        text-align: center;
-        background: #f7fafc;
-        cursor: pointer;
-        transition: border-color .2s, background .2s;
-        position: relative;
-    }
-
-    .image-upload-area:hover {
-        border-color: #3182ce;
-        background: #ebf4ff;
-    }
-
-    .image-upload-area input[type="file"] {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        cursor: pointer;
-        width: 100%;
-        height: 100%;
-    }
-
-    .upload-icon {
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-
-    .upload-text {
-        font-size: 13px;
-        color: #4a5568;
-        font-weight: 500;
-        line-height: 1.5;
-    }
-
-    .upload-hint {
-        font-size: 11.5px;
-        color: #a0aec0;
-        margin-top: 4px;
-    }
-
-    /* ── Footer / Buttons ── */
-    .card-footer {
-        padding: 24px 36px;
-        background: #f7fafc;
-        border-top: 1px solid #edf2f7;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-    }
-
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 11px 24px;
-        border-radius: 10px;
-        font-family: inherit;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        border: none;
-        transition: transform .15s, box-shadow .15s, background .2s;
-        text-decoration: none;
-    }
-
-    .btn:active { transform: translateY(1px); }
-
-    .btn-primary {
-        background: #2563eb;
-        color: #fff;
-        box-shadow: 0 2px 8px rgba(37,99,235,.35);
-    }
-
-    .btn-primary:hover {
-        background: #1d4ed8;
-        box-shadow: 0 4px 14px rgba(37,99,235,.4);
-    }
-
-    .btn-secondary {
-        background: #fff;
-        color: #4a5568;
-        border: 1.5px solid #e2e8f0;
-    }
-
-    .btn-secondary:hover {
-        background: #f7fafc;
-        border-color: #cbd5e0;
-    }
-
-    /* Two-column grid */
-    .two-col {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    @media (max-width: 600px) {
-        .page-wrapper { margin: 24px auto; padding: 0 16px 48px; }
-        .card-section { padding: 24px 20px; }
-        .card-footer { padding: 20px; flex-direction: column-reverse; }
-        .btn { width: 100%; justify-content: center; }
-        .two-col { grid-template-columns: 1fr; }
-        .image-section { grid-template-columns: 1fr; }
-    }
-</style>
-@endsection
-
 @section('content')
-<div class="page-wrapper">
+<div class="min-h-screen bg-slate-100">
+    <div class="max-w-3xl mx-auto px-4 py-10 pb-20">
 
-    {{-- Header --}}
-    <div class="page-header">
-        <div class="breadcrumb">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <span class="breadcrumb-sep">›</span>
-          
-            <span>Edit</span>
-        </div>
-        <h1 class="page-title">Edit Lapangan</h1>
-        <p class="page-subtitle">Perbarui informasi lapangan olahraga Anda</p>
-    </div>
-
-    {{-- Form --}}
-    <form action="{{ route('update-lapangan', $lapangan->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PATCH')
-
-        {{-- Informasi Dasar --}}
-        <div class="card" style="margin-bottom: 20px;">
-            <div class="card-section">
-                <div class="section-label">Informasi Dasar</div>
-
-                <div class="two-col">
-                    <div class="form-group">
-                        <label for="nama_lapangan">Nama Lapangan <span class="required-mark">*</span></label>
-                        <input
-                            type="text"
-                            id="nama_lapangan"
-                            name="nama_lapangan"
-                            placeholder="cth. Lapangan Futsal A"
-                            value="{{ old('nama_lapangan', $lapangan->nama_lapangan) }}"
-                        >
-                        @error('nama_lapangan')
-                            <div class="error-msg">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="jenis_lapangan">Jenis Lapangan <span class="required-mark">*</span></label>
-                        <select id="jenis_lapangan" name="jenis_lapangan">
-                            <option value="" disabled>Pilih jenis...</option>
-                            @foreach ($jenis_lapangan as $jenis)
-                                <option value="{{ $jenis->id }}"
-                                    {{ $lapangan->jenis_lapangan == $jenis->id ? 'selected' : '' }}>
-                                    {{ $jenis->nama_jenis }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('jenis_lapangan')
-                            <div class="error-msg">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="deskripsi_lapangan">Deskripsi</label>
-                    <textarea
-                        id="deskripsi_lapangan"
-                        name="deskripsi_lapangan"
-                        placeholder="Jelaskan fasilitas, ukuran lapangan, dll..."
-                    >{{ old('deskripsi_lapangan', $lapangan->deskripsi_lapangan) }}</textarea>
-                </div>
-
-                <div class="form-group" style="max-width: 280px;">
-                    <label for="harga_sewa">Harga Sewa / Jam <span class="required-mark">*</span></label>
-                    <div class="input-prefix-group">
-                        <span class="input-prefix">Rp</span>
-                        <input
-                            type="number"
-                            id="harga_sewa"
-                            name="harga_sewa"
-                            min="0"
-                            step="1000"
-                            placeholder="0"
-                            value="{{ old('harga_sewa', $lapangan->harga_sewa) }}"
-                        >
-                    </div>
-                    @error('harga_sewa')
-                        <div class="error-msg">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+        {{-- Header --}}
+        <div class="mb-8">
+            <nav class="flex items-center gap-2 text-sm text-slate-500 mb-3">
+                <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline transition-colors">Dashboard</a>
+                <span class="text-slate-300">›</span>
+                <span class="text-slate-500">Edit</span>
+            </nav>
+            <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Edit Lapangan</h1>
+            <p class="text-sm text-slate-500 mt-1">Perbarui informasi lapangan olahraga Anda</p>
         </div>
 
-        {{-- Gambar --}}
-        <div class="card" style="margin-bottom: 20px;">
-            <div class="card-section">
-                <div class="section-label">Foto Lapangan</div>
+        {{-- Form --}}
+        <form action="{{ route('update-lapangan', $lapangan->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PATCH')
 
-                <div class="image-section">
-                    <div>
-                        <label style="margin-bottom: 10px;">Foto Saat Ini</label>
-                        <div class="image-preview-box">
-                            <img
-                                src="{{ $lapangan->gambar_lapangan }}"
-                                alt="Foto {{ $lapangan->nama_lapangan }}"
-                                id="current-preview"
-                            >
-                        </div>
-                    </div>
+            {{-- Card: Informasi Dasar --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-5">
+                <div class="px-8 py-7">
 
-                    <div>
-                        <label style="margin-bottom: 10px;">Ganti Foto <span style="color:#a0aec0;font-weight:400">(opsional)</span></label>
-                        <div class="image-upload-area" id="upload-area">
+                    <p class="text-[11px] font-bold tracking-widest uppercase text-slate-400 mb-6">
+                        Informasi Dasar
+                    </p>
+
+                    {{-- Nama & Jenis (2 kolom) --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+
+                        {{-- Nama Lapangan --}}
+                        <div>
+                            <label for="nama_lapangan" class="block text-sm font-semibold text-slate-700 mb-2">
+                                Nama Lapangan <span class="text-red-500">*</span>
+                            </label>
                             <input
-                                type="file"
-                                name="gambar_lapangan"
-                                accept="image/*"
-                                id="gambar_input"
-                                onchange="previewImage(event)"
+                                type="text"
+                                id="nama_lapangan"
+                                name="nama_lapangan"
+                                placeholder="cth. Lapangan Futsal A"
+                                value="{{ old('nama_lapangan', $lapangan->nama_lapangan) }}"
+                                class="w-full px-4 py-2.5 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl outline-none transition duration-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 @error('nama_lapangan') border-red-400 bg-red-50 focus:ring-red-100 focus:border-red-400 @enderror"
                             >
-                            <div class="upload-icon">📸</div>
-                            <div class="upload-text">Klik atau seret foto ke sini</div>
-                            <div class="upload-hint">PNG, JPG, WEBP · Maks. 2 MB</div>
+                            @error('nama_lapangan')
+                                <p class="flex items-center gap-1.5 mt-1.5 text-xs font-medium text-red-600">
+                                    <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </div>
-                        @error('gambar_lapangan')
-                            <div class="error-msg">{{ $message }}</div>
+
+                        {{-- Jenis Lapangan --}}
+                        <div>
+                            <label for="jenis_lapangan" class="block text-sm font-semibold text-slate-700 mb-2">
+                                Jenis Lapangan <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <select
+                                    id="jenis_lapangan"
+                                    name="jenis_lapangan"
+                                    class="w-full px-4 py-2.5 pr-10 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl outline-none appearance-none cursor-pointer transition duration-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 @error('jenis_lapangan') border-red-400 bg-red-50 @enderror"
+                                >
+                                    <option value="" disabled>Pilih jenis...</option>
+                                    @foreach ($jenis_lapangan as $jenis)
+                                        <option value="{{ $jenis->id }}"
+                                            {{ $lapangan->jenis_lapangan == $jenis->id ? 'selected' : '' }}>
+                                            {{ $jenis->nama_jenis }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            @error('jenis_lapangan')
+                                <p class="flex items-center gap-1.5 mt-1.5 text-xs font-medium text-red-600">
+                                    <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Deskripsi --}}
+                    <div class="mb-5">
+                        <label for="deskripsi_lapangan" class="block text-sm font-semibold text-slate-700 mb-2">
+                            Deskripsi
+                        </label>
+                        <textarea
+                            id="deskripsi_lapangan"
+                            name="deskripsi_lapangan"
+                            rows="4"
+                            placeholder="Jelaskan fasilitas, ukuran lapangan, dll..."
+                            class="w-full px-4 py-2.5 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl outline-none resize-y leading-relaxed transition duration-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                        >{{ old('deskripsi_lapangan', $lapangan->deskripsi_lapangan) }}</textarea>
+                    </div>
+
+                    {{-- Harga Sewa --}}
+                    <div class="max-w-xs">
+                        <label for="harga_sewa" class="block text-sm font-semibold text-slate-700 mb-2">
+                            Harga Sewa / Jam <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex">
+                            <span class="inline-flex items-center px-4 text-sm font-semibold text-slate-500 bg-slate-100 border border-r-0 border-slate-200 rounded-l-xl whitespace-nowrap">
+                                Rp
+                            </span>
+                            <input
+                                type="number"
+                                id="harga_sewa"
+                                name="harga_sewa"
+                                min="0"
+                                step="1000"
+                                placeholder="0"
+                                value="{{ old('harga_sewa', $lapangan->harga_sewa) }}"
+                                class="w-full px-4 py-2.5 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-r-xl outline-none transition duration-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 @error('harga_sewa') border-red-400 bg-red-50 @enderror"
+                            >
+                        </div>
+                        @error('harga_sewa')
+                            <p class="flex items-center gap-1.5 mt-1.5 text-xs font-medium text-red-600">
+                                <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
+
                 </div>
             </div>
-        </div>
 
-        {{-- Footer --}}
-        <div class="card">
-            <div class="card-footer">
-                <a href="{{ route('admin.semua-lapangan') }}" class="btn btn-secondary">
-                    ← Batal
-                </a>
-                <button type="submit" class="btn btn-primary">
-                     Simpan Perubahan
-                </button>
+            {{-- Card: Foto Lapangan --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-5">
+                <div class="px-8 py-7">
+
+                    <p class="text-[11px] font-bold tracking-widest uppercase text-slate-400 mb-6">
+                        Foto Lapangan
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+
+                        {{-- Preview Saat Ini --}}
+                        <div>
+                            <p class="text-sm font-semibold text-slate-700 mb-2">Foto Saat Ini</p>
+                            <div class="aspect-[4/3] rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                                <img
+                                    id="current-preview"
+                                    src="{{ $lapangan->gambar_lapangan }}"
+                                    alt="Foto {{ $lapangan->nama_lapangan }}"
+                                    class="w-full h-full object-cover"
+                                >
+                            </div>
+                        </div>
+
+                        {{-- Upload Baru --}}
+                        <div>
+                            <p class="text-sm font-semibold text-slate-700 mb-2">
+                                Ganti Foto
+                                <span class="text-slate-400 font-normal">(opsional)</span>
+                            </p>
+                            <label
+                                for="gambar_input"
+                                id="upload-area"
+                                class="flex flex-col items-center justify-center aspect-[4/3] border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 cursor-pointer text-center px-5 transition duration-200 hover:border-blue-400 hover:bg-blue-50"
+                            >
+                                <span class="text-3xl mb-2">📸</span>
+                                <span id="upload-text" class="text-sm font-medium text-slate-600 leading-snug">
+                                    Klik atau seret foto ke sini
+                                </span>
+                                <span id="upload-hint" class="text-xs text-slate-400 mt-1">
+                                    PNG, JPG, WEBP · Maks. 2 MB
+                                </span>
+                                <input
+                                    type="file"
+                                    name="gambar_lapangan"
+                                    id="gambar_input"
+                                    accept="image/*"
+                                    class="hidden"
+                                    onchange="previewImage(event)"
+                                >
+                            </label>
+                            @error('gambar_lapangan')
+                                <p class="flex items-center gap-1.5 mt-1.5 text-xs font-medium text-red-600">
+                                    <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
 
-    </form>
+            {{-- Card: Footer Aksi --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="px-8 py-5 bg-slate-50 flex flex-col-reverse sm:flex-row items-center justify-between gap-3">
+
+                    <a href="{{ route('admin.semua-lapangan') }}"
+                       class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 hover:border-slate-300 transition duration-200 active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Batal
+                    </a>
+
+                    <button type="submit"
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-blue-600 shadow-md shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 transition duration-200 active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Simpan Perubahan
+                    </button>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
 </div>
 @endsection
 
@@ -471,16 +238,18 @@
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onload = function(e) {
-            const preview = document.getElementById('current-preview');
-            preview.src = e.target.result;
+        reader.onload = function (e) {
+            // Update preview kiri
+            document.getElementById('current-preview').src = e.target.result;
 
+            // Update tampilan area upload
             const area = document.getElementById('upload-area');
-            area.style.borderColor = '#3182ce';
-            area.style.background = '#ebf4ff';
-            area.querySelector('.upload-text').textContent = file.name;
-            area.querySelector('.upload-hint').textContent =
-                (file.size / 1024).toFixed(0) + ' KB';
+            area.classList.remove('border-slate-300', 'bg-slate-50');
+            area.classList.add('border-blue-400', 'bg-blue-50');
+
+            document.getElementById('upload-text').textContent = file.name;
+            document.getElementById('upload-hint').textContent =
+                (file.size / 1024).toFixed(0) + ' KB · Siap diupload';
         };
         reader.readAsDataURL(file);
     }
