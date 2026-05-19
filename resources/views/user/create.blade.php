@@ -33,7 +33,7 @@
     {{-- Info lapangan --}}
     <div class="bg-white rounded-2xl shadow-sm border border-zinc-100 p-4 sm:p-5 mb-4 flex items-center gap-4">
         @if($lapangan->gambar_lapangan)
-            <img src="{{ $lapangan->gambar_lapangan }}"
+            <img src="{{ asset('images/' . $lapangan->gambar_lapangan) }}"
                  class="w-16 h-16 rounded-xl object-cover flex-shrink-0" alt="{{ $lapangan->nama_lapangan }}">
         @endif
         <div>
