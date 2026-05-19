@@ -164,7 +164,7 @@ class LapanganController extends Controller
 
     public function show(lapangan $lapangan)
     {
-        $view = Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdetaillapangan';
+        $view = Auth::user()->role == 'admin' ? 'admin.detaillapangan' : 'user.userdetaillapangan';
         $lapangan->load('jenisLapangan');
         $totalPendapatan = Booking::where('status', 'selesai')
     ->sum('total_harga');

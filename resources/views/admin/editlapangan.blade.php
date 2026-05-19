@@ -10,7 +10,7 @@
         <div class="mb-8">
             <nav class="flex items-center gap-2 text-sm text-slate-500 mb-3">
                 <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline transition-colors">Dashboard</a>
-                <span class="text-slate-300">›</span>
+                <span class="text-slate-300"></span>
                 <span class="text-slate-500">Edit</span>
             </nav>
             <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Edit Lapangan</h1>
