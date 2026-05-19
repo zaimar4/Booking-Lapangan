@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         //     'password' => bcrypt('123456789'),
         // ]);
         // User::factory(100)->create();
-        JenisLapangan::factory(4)->create();
+        // JenisLapangan::factory(4)->create();
         // Lapangan::factory(4)->create();
         // Booking::factory(20)->create();
         
