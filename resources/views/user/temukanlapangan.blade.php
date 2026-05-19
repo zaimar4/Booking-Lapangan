@@ -58,12 +58,12 @@
     {{-- Grid Lapangan --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
         @forelse($lapangan as $item)
-            @php
-                $jamBukaInt  = (int) explode(':', $item->jam_buka)[0];
-                $jamTutupInt = (int) explode(':', $item->jam_tutup)[0];
-                $jamSekarang = (int) now()->format('H');
-                $isBuka      = $jamSekarang >= $jamBukaInt && $jamSekarang < $jamTutupInt;
-            @endphp
+           @php
+            $jamBukaInt  = (int) explode(':', $item->jam_buka)[0];
+            $jamTutupInt = (int) explode(':', $item->jam_tutup)[0];
+            $jamSekarang = (int) now('Asia/Jakarta')->format('H');
+            $isBuka      = $jamSekarang >= $jamBukaInt && $jamSekarang < $jamTutupInt;
+        @endphp
 
             <div class="group bg-white rounded-2xl overflow-hidden border border-zinc-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
 
