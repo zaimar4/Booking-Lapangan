@@ -451,7 +451,7 @@
         {{-- Footer --}}
         <div class="card">
             <div class="card-footer">
-                <a href="{{ route('lapangan.index') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.semua-lapangan') }}" class="btn btn-secondary">
                     ← Batal
                 </a>
                 <button type="submit" class="btn btn-primary">
