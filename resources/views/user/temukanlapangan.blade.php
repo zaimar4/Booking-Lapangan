@@ -69,7 +69,7 @@
 
                 <div class="relative overflow-hidden">
                     @if($item->gambar_lapangan)
-                        <img src="{{ asset('images/' . $item->gambar_lapangan) }}"
+                        <img src="{{ $item->gambar_lapangan }}"
                              class="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-500 {{ !$isBuka ? 'brightness-75' : '' }}"
                              alt="{{ $item->nama_lapangan }}">
                     @else
