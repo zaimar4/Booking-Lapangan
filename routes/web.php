@@ -7,12 +7,14 @@ use App\Http\Controllers\JenisLapanganController;
 use App\Http\Controllers\LapanganController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Lapangan;
+use App\Http\Controllers\LaporanController; 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('auth.login');
-});
+    $jenisLapangans = \App\Models\JenisLapangan::selectRaw('jenis_lapangans.*, (select count(*) from lapangans where lapangans.jenis_lapangan = jenis_lapangans.id) as lapangan_count')->get();
+    return view('welcome', compact('jenisLapangans'));
+})->name('home');
 
 Route::get('/dashboard', function () {
 
@@ -47,7 +49,10 @@ Route::prefix('admin')->middleware(['auth', 'checkrole:admin'])->group(function 
 
     Route::get('/daftar-booking', [AdminBookingController::class, 'index'])->name('admin.daftar-booking');
     Route::patch('/booking/{booking}', [AdminBookingController::class, 'update'])->name('admin.booking.update');
-  
+
+    Route::get('/laporan-pendapatan', [LaporanController::class, 'index'])->name('admin.laporan.pendapatan');
+    Route::get('/laporan-pendapatan/pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.pdf');
+
 
 });
 Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function () {
@@ -79,9 +84,9 @@ Route::prefix('user')->middleware(['auth', 'checkrole:user'])->group(function ()
     Route::get('/booking/{lapangan}', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
     Route::get('/booking-saya', [BookingController::class, 'index'])->name('booking.index');
-      Route::get(
-    '/booking/slots/{lapangan}/{tanggal}',
-    [BookingController::class, 'getBookedSlots']
+    Route::get(
+        '/booking/slots/{lapangan}/{tanggal}',
+        [BookingController::class, 'getBookedSlots']
     );
 
 });
