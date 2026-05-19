@@ -1,6 +1,6 @@
 {{-- resources/views/edit-lapangan.blade.php --}}
 
-@extends('layouts.app')
+@extends('layouts.layout')
 
 @section('styles')
 <style>
@@ -455,7 +455,7 @@
                     ← Batal
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    💾 Simpan Perubahan
+                     Simpan Perubahan
                 </button>
             </div>
         </div>
