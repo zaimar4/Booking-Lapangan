@@ -330,8 +330,7 @@
         <div class="breadcrumb">
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <span class="breadcrumb-sep">›</span>
-            <a href="{{ route('lapangan.index') }}">Lapangan</a>
-            <span class="breadcrumb-sep">›</span>
+          
             <span>Edit</span>
         </div>
         <h1 class="page-title">Edit Lapangan</h1>
