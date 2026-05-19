@@ -92,6 +92,7 @@ class LapanganController extends Controller
  
         $jenis_lapangan = JenisLapangan::all();
         $totalLapangan  = Lapangan::count();
+       
  
         if (Auth::user()->role === 'admin') {
             $lapangan = $query->paginate(10)->withQueryString();
@@ -165,7 +166,9 @@ class LapanganController extends Controller
     {
         $view = Auth::user()->role == 'admin' ? 'admin.admindashboard' : 'user.userdetaillapangan';
         $lapangan->load('jenisLapangan');
-        return view($view, compact('lapangan'));
+        $totalPendapatan = Booking::where('status', 'selesai')
+    ->sum('total_harga');
+        return view($view, compact('lapangan','totalPendapatan'));
     }
 
     private function uploadToSupabase($file)

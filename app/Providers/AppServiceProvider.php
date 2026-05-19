@@ -29,19 +29,24 @@ public function boot(): void
         URL::forceScheme('https');
     }
 
-    View::composer('admin.admindashboard', function ($view) {
-        
-        $statistik = Cache::remember('admin_stats', 600, function () {
-            return [
-                'totalLapangan'     => Lapangan::count(),
-                'totalBookingSemua' => Booking::count(),
-                'bookingPending'    => Booking::where('status', 'pending')->count(),
-            ];
-        });
-
-        // Kirim data yang sudah di-cache ke view
-        $view->with($statistik);
+// Menggunakan 'admin.*' agar otomatis dibagikan ke 'admin.admindashboard' DAN 'admin.detail'
+View::composer(['admin.admindashboard', 'admin.*'], function ($view) {
+    
+    $statistik = Cache::remember('admin_stats_v2', 600, function () {
+        return [
+            'totalLapangan'        => \App\Models\Lapangan::count(),
+            'totalBookingSemua'    => \App\Models\Booking::count(),
+            'bookingPending'       => \App\Models\Booking::where('status', 'pending')->count(),
+            
+            'totalPendapatanSemua' => \App\Models\Booking::join('lapangans', 'lapangans.id', '=', 'bookings.lapangan_id')
+                ->whereIn('bookings.status', ['confirmed', 'completed'])
+                ->selectRaw('SUM(lapangans.harga_sewa * TIMESTAMPDIFF(HOUR, bookings.jam_mulai, bookings.jam_selesai)) as total')
+                ->value('total') ?? 0,
+        ];
     });
+
+    $view->with($statistik);
+});
 }
 }
 
