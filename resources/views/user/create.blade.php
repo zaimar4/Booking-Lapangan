@@ -138,7 +138,6 @@
     </div>
 
 </div>
-
 <script>
     const hargaPerJam  = {{ $lapangan->harga_sewa }};
     const tanggalInput = document.getElementById('tanggal');
@@ -146,9 +145,9 @@
     const durasiText   = document.getElementById('durasi');
     const hargaText    = document.getElementById('harga');
 
-    const nowHour  = {{ (int) now()->format('H') }};
-    const nowMin   = {{ (int) now()->format('i') }};   // ← tambah menit
-    const todayStr = '{{ now()->toDateString() }}';
+    // Waktu sekarang dalam total menit
+    const nowTotalMin  = {{ (int) now()->format('H') }} * 60 + {{ (int) now()->format('i') }};
+    const todayStr     = '{{ now()->toDateString() }}';
 
     let selectedSlots = [];
 
@@ -158,27 +157,25 @@
     const CLASS_PAST     = 'slot-btn border border-zinc-300 rounded-xl py-2.5 sm:py-3 text-sm font-semibold bg-zinc-200 text-zinc-400 cursor-not-allowed';
 
     function isPastSlot(jamStr) {
-        // jamStr format "08:00"
-        const [h, m] = jamStr.split(':').map(Number);
-        return h < nowHour || (h === nowHour && m <= nowMin);
+        const [h] = jamStr.split(':').map(Number);
+        const slotTotalMin = h * 60;
+        // Slot dianggap lewat jika waktu mulai slot <= waktu sekarang
+        return slotTotalMin <= nowTotalMin;
     }
 
     function markPastSlots() {
         const isToday = tanggalInput.value === todayStr;
 
         document.querySelectorAll('.slot-btn').forEach(btn => {
-            // Jangan sentuh slot yang sudah dibooking
             if (btn.dataset.status === 'booked') return;
 
             if (isToday && isPastSlot(btn.dataset.jam)) {
                 btn.disabled       = true;
                 btn.className      = CLASS_PAST;
-                btn.dataset.status = 'past';          // ← tandai sebagai past
+                btn.dataset.status = 'past';
                 btn.title          = 'Jam ini sudah lewat';
-                // Hapus dari pilihan kalau sempat terpilih
                 selectedSlots = selectedSlots.filter(s => s !== btn.dataset.jam);
             } else if (btn.dataset.status === 'past') {
-                // Kalau tanggal diganti ke masa depan, reset past → available
                 btn.disabled       = false;
                 btn.className      = CLASS_DEFAULT;
                 delete btn.dataset.status;
@@ -217,7 +214,7 @@
                 }
             });
 
-            // Tandai past (setelah booked agar tidak override)
+            // Tandai past setelah booked agar tidak override
             markPastSlots();
 
         } catch (error) {
@@ -262,7 +259,6 @@
 
     function updateBooking() {
         document.querySelectorAll('.slot-btn').forEach(btn => {
-            // ← skip booked DAN past
             if (btn.dataset.status === 'booked' || btn.dataset.status === 'past') return;
 
             btn.className = selectedSlots.includes(btn.dataset.jam)
