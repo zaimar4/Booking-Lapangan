@@ -34,5 +34,6 @@ public function boot(): void
    
         
 }
+}
 
 
